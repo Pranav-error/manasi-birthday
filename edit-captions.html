@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📸 Edit Photo Captions</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 2.5rem;
+        }
+        
+        .instructions {
+            background: #f0f4ff;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .instructions h2 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+        }
+        
+        .instructions ol {
+            margin-left: 20px;
+            line-height: 1.8;
+        }
+        
+        .section-header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            margin: 30px 0 20px 0;
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .section-header .count {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+        
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+            min-height: 100px;
+            padding: 10px;
+            border: 2px dashed transparent;
+            border-radius: 10px;
+            transition: all 0.3s;
+        }
+        
+        .photo-grid.drop-zone-active {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+        
+        .photo-card {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: move;
+            position: relative;
+        }
+        
+        .photo-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+        
+        .photo-card.dragging {
+            opacity: 0.5;
+            transform: scale(0.95);
+        }
+        
+        .photo-card.drag-over {
+            border: 3px dashed #667eea;
+            background: #e8eeff;
+        }
+        
+        .drag-handle {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(102, 126, 234, 0.9);
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            cursor: grab;
+            z-index: 10;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+        
+        .drag-handle:active {
+            cursor: grabbing;
+        }
+        
+        .section-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .btn-small {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: transform 0.2s;
+            flex: 1;
+            min-width: 100px;
+        }
+        
+        .btn-small:hover {
+            transform: scale(1.05);
+        }
+        
+        .btn-small.danger {
+            background: linear-gradient(135deg, #f5576c, #f093fb);
+        }
+        
+        .btn-small.info {
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+        }
+        
+        .photo-wrapper {
+            position: relative;
+            width: 100%;
+            height: 250px;
+            background: #e9ecef;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 12px;
+            cursor: pointer;
+        }
+        
+        .photo-wrapper:hover {
+            outline: 3px solid #667eea;
+        }
+        
+        .view-mode-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(102, 126, 234, 0.9);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            z-index: 5;
+        }
+        
+        .rotation-controls {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            display: flex;
+            gap: 5px;
+            z-index: 10;
+        }
+        
+        .rotate-btn {
+            background: rgba(102, 126, 234, 0.95);
+            color: white;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+        
+        .rotate-btn:hover {
+            background: rgba(118, 75, 162, 0.95);
+            transform: scale(1.1);
+        }
+        
+        .rotate-btn:active {
+            transform: scale(0.95);
+        }
+        
+        .photo-wrapper img, .photo-wrapper video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: all 0.3s;
+            transform-origin: center center;
+        }
+        
+        .photo-wrapper img.fit-contain, .photo-wrapper video.fit-contain {
+            object-fit: contain;
+            background: #000;
+        }
+        
+        .photo-wrapper img.rotate-90, .photo-wrapper video.rotate-90 {
+            transform: rotate(90deg);
+        }
+        
+        .photo-wrapper img.rotate-180, .photo-wrapper video.rotate-180 {
+            transform: rotate(180deg);
+        }
+        
+        .photo-wrapper img.rotate-270, .photo-wrapper video.rotate-270 {
+            transform: rotate(270deg);
+        }
+        
+        .photo-wrapper img.rotate-90.fit-contain, .photo-wrapper video.rotate-90.fit-contain {
+            transform: rotate(90deg);
+        }
+        
+        .photo-wrapper img.rotate-180.fit-contain, .photo-wrapper video.rotate-180.fit-contain {
+            transform: rotate(180deg);
+        }
+        
+        .photo-wrapper img.rotate-270.fit-contain, .photo-wrapper video.rotate-270.fit-contain {
+            transform: rotate(270deg);
+        }
+        
+        .photo-wrapper .media-type {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .filename {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 8px;
+            font-family: 'Courier New', monospace;
+            word-break: break-all;
+        }
+        
+        .caption-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+        
+        .caption-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .no-caption {
+            color: #999;
+            font-style: italic;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .export-section {
+            position: sticky;
+            bottom: 20px;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
+            text-align: center;
+            margin-top: 40px;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin: 5px;
+        }
+        
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn:active {
+            transform: scale(0.98);
+        }
+        
+        #output {
+            display: none;
+            margin-top: 20px;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #667eea;
+        }
+        
+        #output textarea {
+            width: 100%;
+            height: 400px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            resize: vertical;
+        }
+        
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .save-indicator {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(102, 126, 234, 0.95);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            z-index: 10000;
+            display: none;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            animation: fadeInOut 1s ease;
+        }
+        
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0; }
+            10%, 90% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="save-indicator" id="save-indicator">💾 Saved!</div>
+    
+    <div class="container">
+        <h1>📸 Visual Caption Editor</h1>
+        
+        <div class="instructions">
+            <h2>🎯 How to Use:</h2>
+            <ol>
+                <li><strong>View all your photos</strong> with their current captions below</li>
+                <li><strong>Click on a photo</strong> to toggle between cropped (zoom) and full view</li>
+                <li><strong>Rotate photos</strong> using the 🔄 buttons on each photo (↪️ right, ↩️ left)</li>
+                <li><strong>Drag photos</strong> to reorder them within a section or move between sections</li>
+                <li><strong>Edit captions</strong> directly by typing in the text boxes</li>
+                <li><strong>Delete photos</strong> from sections using the 🗑️ button</li>
+                <li><strong>Auto-save:</strong> Your work is automatically saved every 2 seconds! 💾</li>
+                <li><strong>Click "Generate Updated Code"</strong> when done</li>
+                <li><strong>Copy the generated code</strong> and paste it into <code>js/media-manifest.js</code></li>
+                <li><strong>Save the file</strong> and refresh your birthday website!</li>
+            </ol>
+        </div>
+        
+        <div id="restore-banner" style="display:none; background: #d1ecf1; color: #0c5460; padding: 15px; border-radius: 10px; margin-bottom: 20px; border: 2px solid #bee5eb;">
+            <strong>✅ Restored your previous work!</strong> Your edits (deletions, caption changes, rotations) have been loaded.
+        </div>
+        
+        <div id="sections-container"></div>
+        
+        <div class="export-section">
+            <button class="btn" onclick="toggleAllViews()">👁️ Toggle All Views (Zoom ↔ Full)</button>
+            <button class="btn" onclick="generateCode()">✨ Generate Updated Code</button>
+            <button class="btn" onclick="downloadCode()" style="background: linear-gradient(135deg, #f093fb, #f5576c);">💾 Download Code</button>
+            <button class="btn" onclick="clearSavedWork()" style="background: linear-gradient(135deg, #ffa726, #fb8c00);">�️ Clear Saved Work</button>
+            <button class="btn" onclick="resetAll()" style="background: linear-gradient(135deg, #ff6b6b, #ee5a6f);">🔄 Reset to Original</button>
+            <div id="output">
+                <h3 style="margin-bottom: 10px;">📋 Copy this entire code and paste into <code>js/media-manifest.js</code>:</h3>
+                <textarea id="code-output" readonly></textarea>
+                <button class="btn" onclick="copyToClipboard()" style="margin-top: 10px;">📋 Copy to Clipboard</button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="js/media-manifest.js"></script>
+    <script>
+        // Store original manifest for reset
+        const ORIGINAL_MANIFEST = JSON.parse(JSON.stringify(MEDIA_MANIFEST));
+        
+        // Store rotation data for each file
+        const ROTATION_DATA = {};
+        
+        // Initialize rotation data from manifest if it exists
+        Object.keys(MEDIA_MANIFEST).forEach(section => {
+            MEDIA_MANIFEST[section].forEach(item => {
+                if (item.rotation) {
+                    ROTATION_DATA[item.file] = item.rotation;
+                }
+            });
+        });
+        
+        // Try to load saved work from localStorage
+        const savedWork = localStorage.getItem('mediaManifestWork');
+        if (savedWork) {
+            try {
+                const parsed = JSON.parse(savedWork);
+                Object.keys(parsed.manifest).forEach(key => {
+                    MEDIA_MANIFEST[key] = parsed.manifest[key];
+                });
+                Object.keys(parsed.rotations).forEach(key => {
+                    ROTATION_DATA[key] = parsed.rotations[key];
+                });
+                console.log('✅ Loaded saved work from previous session');
+                
+                // Show restore banner
+                const banner = document.getElementById('restore-banner');
+                if (banner) {
+                    banner.style.display = 'block';
+                    setTimeout(() => {
+                        banner.style.transition = 'opacity 0.5s';
+                        banner.style.opacity = '0';
+                        setTimeout(() => { banner.style.display = 'none'; }, 500);
+                    }, 5000);
+                }
+            } catch (e) {
+                console.error('Failed to load saved work:', e);
+            }
+        }
+        
+        // Auto-save work every 2 seconds
+        setInterval(() => {
+            saveWork();
+        }, 2000);
+        
+        function saveWork() {
+            try {
+                const workData = {
+                    manifest: MEDIA_MANIFEST,
+                    rotations: ROTATION_DATA,
+                    timestamp: new Date().toISOString()
+                };
+                localStorage.setItem('mediaManifestWork', JSON.stringify(workData));
+                
+                // Show save indicator
+                const indicator = document.getElementById('save-indicator');
+                if (indicator) {
+                    indicator.style.display = 'block';
+                    setTimeout(() => {
+                        indicator.style.display = 'none';
+                    }, 1000);
+                }
+            } catch (e) {
+                console.error('Failed to save work:', e);
+            }
+        }
+        
+        // Render all sections
+        function renderSections() {
+            const container = document.getElementById('sections-container');
+            container.innerHTML = ''; // Clear existing content
+            
+            // 1. POLAROIDS (with captions)
+            if (MEDIA_MANIFEST.polaroids && MEDIA_MANIFEST.polaroids.length > 0) {
+                const section = document.createElement('div');
+                section.innerHTML = `<div class="section-header">
+                    <span>📸 Polaroid Wall</span>
+                    <span class="count">${MEDIA_MANIFEST.polaroids.length} photos</span>
+                </div>`;
+                
+                const grid = document.createElement('div');
+                grid.className = 'photo-grid';
+                grid.dataset.section = 'polaroids';
+                
+                MEDIA_MANIFEST.polaroids.forEach((item, idx) => {
+                    const card = createPhotoCard(item, 'polaroids', idx);
+                    grid.appendChild(card);
+                });
+                
+                setupDropZone(grid);
+                section.appendChild(grid);
+                container.appendChild(section);
+            }
+            
+            // 2. CAROUSEL ROW 1
+            if (MEDIA_MANIFEST.carouselRow1 && MEDIA_MANIFEST.carouselRow1.length > 0) {
+                const section = document.createElement('div');
+                section.innerHTML = `<div class="section-header">
+                    <span>🎞️ Carousel Row 1</span>
+                    <span class="count">${MEDIA_MANIFEST.carouselRow1.length} photos</span>
+                </div>`;
+                
+                const grid = document.createElement('div');
+                grid.className = 'photo-grid';
+                grid.dataset.section = 'carouselRow1';
+                
+                MEDIA_MANIFEST.carouselRow1.forEach((item, idx) => {
+                    const card = createPhotoCard(item, 'carouselRow1', idx, false);
+                    grid.appendChild(card);
+                });
+                
+                setupDropZone(grid);
+                section.appendChild(grid);
+                container.appendChild(section);
+            }
+            
+            // 3. CAROUSEL ROW 2
+            if (MEDIA_MANIFEST.carouselRow2 && MEDIA_MANIFEST.carouselRow2.length > 0) {
+                const section = document.createElement('div');
+                section.innerHTML = `<div class="section-header">
+                    <span>🎞️ Carousel Row 2</span>
+                    <span class="count">${MEDIA_MANIFEST.carouselRow2.length} photos</span>
+                </div>`;
+                
+                const grid = document.createElement('div');
+                grid.className = 'photo-grid';
+                grid.dataset.section = 'carouselRow2';
+                
+                MEDIA_MANIFEST.carouselRow2.forEach((item, idx) => {
+                    const card = createPhotoCard(item, 'carouselRow2', idx, false);
+                    grid.appendChild(card);
+                });
+                
+                setupDropZone(grid);
+                section.appendChild(grid);
+                container.appendChild(section);
+            }
+            
+            // 4. MOSAIC
+            if (MEDIA_MANIFEST.mosaic && MEDIA_MANIFEST.mosaic.length > 0) {
+                const section = document.createElement('div');
+                section.innerHTML = `<div class="section-header">
+                    <span>🖼️ Mosaic</span>
+                    <span class="count">${MEDIA_MANIFEST.mosaic.length} photos</span>
+                </div>`;
+                
+                const grid = document.createElement('div');
+                grid.className = 'photo-grid';
+                grid.dataset.section = 'mosaic';
+                
+                MEDIA_MANIFEST.mosaic.forEach((item, idx) => {
+                    const card = createPhotoCard(item, 'mosaic', idx, false);
+                    grid.appendChild(card);
+                });
+                
+                setupDropZone(grid);
+                section.appendChild(grid);
+                container.appendChild(section);
+            }
+            
+            // 5. TIMELINE (with date labels)
+            if (MEDIA_MANIFEST.timeline && MEDIA_MANIFEST.timeline.length > 0) {
+                const section = document.createElement('div');
+                section.innerHTML = `<div class="section-header">
+                    <span>📅 Timeline</span>
+                    <span class="count">${MEDIA_MANIFEST.timeline.length} photos</span>
+                </div>`;
+                
+                const grid = document.createElement('div');
+                grid.className = 'photo-grid';
+                grid.dataset.section = 'timeline';
+                
+                MEDIA_MANIFEST.timeline.forEach((item, idx) => {
+                    const card = createPhotoCard(item, 'timeline', idx, true, true);
+                    grid.appendChild(card);
+                });
+                
+                setupDropZone(grid);
+                section.appendChild(grid);
+                container.appendChild(section);
+            }
+        }
+        
+        function createPhotoCard(item, section, index, hasCaption = true, isTimeline = false) {
+            const card = document.createElement('div');
+            card.className = 'photo-card';
+            card.draggable = true;
+            card.dataset.section = section;
+            card.dataset.index = index;
+            card.dataset.file = item.file;
+            
+            const filename = item.file;
+            const ext = filename.split('.').pop().toLowerCase();
+            const isVideo = ['mp4', 'mov', 'webm'].includes(ext);
+            const isGif = ext === 'gif';
+            const isUnsupported = ['heic'].includes(ext);
+            
+            // Get rotation from item or ROTATION_DATA
+            const rotation = item.rotation || ROTATION_DATA[filename] || 0;
+            let rotationClass = '';
+            if (rotation === 90) rotationClass = 'rotate-90';
+            else if (rotation === 180) rotationClass = 'rotate-180';
+            else if (rotation === 270) rotationClass = 'rotate-270';
+            
+            let mediaHTML = '';
+            if (isUnsupported) {
+                mediaHTML = `
+                    <div class="photo-wrapper" data-file="${filename}">
+                        <div style="display:flex;align-items:center;justify-content:center;height:100%;color:#999;">
+                            <div style="text-align:center;">
+                                <div style="font-size:3rem;">📱</div>
+                                <div style="margin-top:10px;">HEIC Format</div>
+                                <div style="font-size:0.8rem;margin-top:5px;">Cannot preview in browser</div>
+                            </div>
+                        </div>
+                        <div class="media-type">HEIC</div>
+                    </div>
+                `;
+            } else if (isVideo) {
+                mediaHTML = `
+                    <div class="photo-wrapper" data-file="${filename}" onclick="toggleViewMode(this)">
+                        <div class="view-mode-badge">🔍 Click to toggle view</div>
+                        <div class="rotation-controls">
+                            <button class="rotate-btn" onclick="event.stopPropagation(); rotateMedia('${filename}', -90)" title="Rotate Left">↩️</button>
+                            <button class="rotate-btn" onclick="event.stopPropagation(); rotateMedia('${filename}', 90)" title="Rotate Right">↪️</button>
+                        </div>
+                        <video controls muted class="media-element ${rotationClass}" data-rotation="${rotation}">
+                            <source src="Pictures/${encodeURIComponent(filename)}" type="video/${ext}">
+                        </video>
+                        <div class="media-type">📹 ${ext.toUpperCase()}</div>
+                    </div>
+                `;
+            } else {
+                mediaHTML = `
+                    <div class="photo-wrapper" data-file="${filename}" onclick="toggleViewMode(this)">
+                        <div class="view-mode-badge">🔍 Click to toggle view</div>
+                        <div class="rotation-controls">
+                            <button class="rotate-btn" onclick="event.stopPropagation(); rotateMedia('${filename}', -90)" title="Rotate Left">↩️</button>
+                            <button class="rotate-btn" onclick="event.stopPropagation(); rotateMedia('${filename}', 90)" title="Rotate Right">↪️</button>
+                        </div>
+                        <img src="Pictures/${encodeURIComponent(filename)}" alt="${filename}" loading="lazy" class="media-element ${rotationClass}" data-rotation="${rotation}">
+                        ${isGif ? '<div class="media-type">GIF</div>' : ''}
+                    </div>
+                `;
+            }
+            
+            let captionHTML = '';
+            if (hasCaption) {
+                const captionValue = isTimeline ? (item.label || '') : (item.caption || '');
+                const placeholder = isTimeline ? 'e.g., "Summer 2024 🏖️"' : 'e.g., "best day ever! 🎉"';
+                captionHTML = `
+                    <input 
+                        type="text" 
+                        class="caption-input" 
+                        data-section="${section}" 
+                        data-index="${index}"
+                        data-type="${isTimeline ? 'label' : 'caption'}"
+                        value="${captionValue}"
+                        placeholder="${placeholder}"
+                    >
+                `;
+            } else {
+                captionHTML = `<div class="no-caption">No caption for this section</div>`;
+            }
+            
+            card.innerHTML = `
+                <div class="drag-handle" title="Drag to move">⋮⋮</div>
+                ${mediaHTML}
+                <div class="filename">${filename}</div>
+                ${captionHTML}
+                <div class="section-actions">
+                    <button class="btn-small info" onclick="toggleViewMode(this.closest('.photo-card').querySelector('.photo-wrapper'))">👁️ Toggle View</button>
+                    <button class="btn-small danger" onclick="deletePhoto('${section}', '${filename}')">🗑️ Delete</button>
+                </div>
+            `;
+            
+            // Drag events
+            card.addEventListener('dragstart', handleDragStart);
+            card.addEventListener('dragend', handleDragEnd);
+            card.addEventListener('dragover', handleDragOver);
+            card.addEventListener('drop', handleDrop);
+            
+            return card;
+        }
+        
+        let draggedElement = null;
+        
+        function handleDragStart(e) {
+            draggedElement = this;
+            this.classList.add('dragging');
+            e.dataTransfer.effectAllowed = 'move';
+            e.dataTransfer.setData('text/html', this.innerHTML);
+        }
+        
+        function handleDragEnd(e) {
+            this.classList.remove('dragging');
+            document.querySelectorAll('.photo-card').forEach(card => {
+                card.classList.remove('drag-over');
+            });
+            document.querySelectorAll('.photo-grid').forEach(grid => {
+                grid.classList.remove('drop-zone-active');
+            });
+        }
+        
+        function handleDragOver(e) {
+            if (e.preventDefault) {
+                e.preventDefault();
+            }
+            e.dataTransfer.dropEffect = 'move';
+            
+            const target = e.target.closest('.photo-card');
+            if (target && target !== draggedElement) {
+                target.classList.add('drag-over');
+            }
+            
+            return false;
+        }
+        
+        function handleDrop(e) {
+            if (e.stopPropagation) {
+                e.stopPropagation();
+            }
+            
+            const target = e.target.closest('.photo-card');
+            if (target && draggedElement !== target) {
+                const draggedSection = draggedElement.dataset.section;
+                const draggedFile = draggedElement.dataset.file;
+                const targetSection = target.dataset.section;
+                
+                // Remove from old section
+                const draggedItem = MEDIA_MANIFEST[draggedSection].find(item => item.file === draggedFile);
+                MEDIA_MANIFEST[draggedSection] = MEDIA_MANIFEST[draggedSection].filter(item => item.file !== draggedFile);
+                
+                // Add to new section at target position
+                const targetIndex = Array.from(target.parentNode.children).indexOf(target);
+                MEDIA_MANIFEST[targetSection].splice(targetIndex, 0, draggedItem);
+                
+                // Re-render
+                renderSections();
+            }
+            
+            return false;
+        }
+        
+        function setupDropZone(grid) {
+            grid.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                grid.classList.add('drop-zone-active');
+            });
+            
+            grid.addEventListener('dragleave', (e) => {
+                if (e.target === grid) {
+                    grid.classList.remove('drop-zone-active');
+                }
+            });
+            
+            grid.addEventListener('drop', (e) => {
+                e.preventDefault();
+                grid.classList.remove('drop-zone-active');
+                
+                // Drop on empty space in grid
+                if (e.target === grid) {
+                    const targetSection = grid.dataset.section;
+                    const draggedSection = draggedElement.dataset.section;
+                    const draggedFile = draggedElement.dataset.file;
+                    
+                    // Remove from old section
+                    const draggedItem = MEDIA_MANIFEST[draggedSection].find(item => item.file === draggedFile);
+                    MEDIA_MANIFEST[draggedSection] = MEDIA_MANIFEST[draggedSection].filter(item => item.file !== draggedFile);
+                    
+                    // Add to end of new section
+                    MEDIA_MANIFEST[targetSection].push(draggedItem);
+                    
+                    // Re-render
+                    renderSections();
+                }
+            });
+        }
+        
+        function deletePhoto(section, filename) {
+            if (confirm(`Delete "${filename}" from ${section}?`)) {
+                MEDIA_MANIFEST[section] = MEDIA_MANIFEST[section].filter(item => item.file !== filename);
+                renderSections();
+            }
+        }
+        
+        function toggleViewMode(wrapper) {
+            if (!wrapper) return;
+            
+            const mediaElement = wrapper.querySelector('.media-element');
+            if (!mediaElement) return;
+            
+            const badge = wrapper.querySelector('.view-mode-badge');
+            
+            if (mediaElement.classList.contains('fit-contain')) {
+                mediaElement.classList.remove('fit-contain');
+                if (badge) badge.textContent = '🔍 Click to toggle view';
+            } else {
+                mediaElement.classList.add('fit-contain');
+                if (badge) badge.textContent = '✅ Full view (click to zoom)';
+            }
+        }
+        
+        function toggleAllViews() {
+            const allMedia = document.querySelectorAll('.media-element');
+            const firstElement = allMedia[0];
+            
+            // Check the state of the first element to determine what to do
+            const shouldContain = !firstElement.classList.contains('fit-contain');
+            
+            allMedia.forEach(media => {
+                const wrapper = media.closest('.photo-wrapper');
+                const badge = wrapper ? wrapper.querySelector('.view-mode-badge') : null;
+                
+                if (shouldContain) {
+                    media.classList.add('fit-contain');
+                    if (badge) badge.textContent = '✅ Full view (click to zoom)';
+                } else {
+                    media.classList.remove('fit-contain');
+                    if (badge) badge.textContent = '🔍 Click to toggle view';
+                }
+            });
+        }
+        
+        function rotateMedia(filename, degrees) {
+            // Find all instances of this file
+            const wrappers = document.querySelectorAll(`.photo-wrapper[data-file="${filename}"]`);
+            
+            wrappers.forEach(wrapper => {
+                const media = wrapper.querySelector('.media-element');
+                if (!media) return;
+                
+                // Get current rotation
+                let currentRotation = parseInt(media.dataset.rotation || '0');
+                
+                // Calculate new rotation
+                let newRotation = (currentRotation + degrees) % 360;
+                if (newRotation < 0) newRotation += 360;
+                
+                // Store rotation
+                media.dataset.rotation = newRotation;
+                ROTATION_DATA[filename] = newRotation;
+                
+                // Remove all rotation classes
+                media.classList.remove('rotate-90', 'rotate-180', 'rotate-270');
+                
+                // Add appropriate rotation class
+                if (newRotation === 90) {
+                    media.classList.add('rotate-90');
+                } else if (newRotation === 180) {
+                    media.classList.add('rotate-180');
+                } else if (newRotation === 270) {
+                    media.classList.add('rotate-270');
+                }
+            });
+        }
+        
+        function generateCode() {
+            // Read all caption inputs and update MEDIA_MANIFEST
+            const inputs = document.querySelectorAll('.caption-input');
+            
+            inputs.forEach(input => {
+                const section = input.dataset.section;
+                const index = parseInt(input.dataset.index);
+                const type = input.dataset.type;
+                const value = input.value.trim();
+                
+                if (MEDIA_MANIFEST[section] && MEDIA_MANIFEST[section][index]) {
+                    if (type === 'label') {
+                        MEDIA_MANIFEST[section][index].label = value;
+                    } else {
+                        MEDIA_MANIFEST[section][index].caption = value;
+                    }
+                }
+            });
+            
+            // Generate JavaScript code
+            let code = `/* ═══════════════════════════════════════════════════════════════
+   📸 MEDIA MANIFEST — EDITED WITH VISUAL TOOL
+   ═══════════════════════════════════════════════════════════════
+   
+   ✨ Last edited: ${new Date().toLocaleString()}
+   🎯 Total files: ${Object.values(MEDIA_MANIFEST).flat().length}
+   
+   ═══════════════════════════════════════════════════════════════ */
+
+const MEDIA_MANIFEST = {
+    
+`;
+            
+            // Polaroids
+            if (MEDIA_MANIFEST.polaroids) {
+                code += `    // 📸 POLAROID WALL (${MEDIA_MANIFEST.polaroids.length} photos)\n`;
+                code += `    polaroids: [\n`;
+                MEDIA_MANIFEST.polaroids.forEach((item, idx) => {
+                    const comma = idx < MEDIA_MANIFEST.polaroids.length - 1 ? ',' : '';
+                    const rotation = ROTATION_DATA[item.file] || 0;
+                    if (rotation !== 0) {
+                        code += `        { file: "${item.file}", caption: "${item.caption || ''}", rotation: ${rotation} }${comma}\n`;
+                    } else {
+                        code += `        { file: "${item.file}", caption: "${item.caption || ''}" }${comma}\n`;
+                    }
+                });
+                code += `    ],\n\n`;
+            }
+            
+            // Carousel Row 1
+            if (MEDIA_MANIFEST.carouselRow1) {
+                code += `    // 🎞️ CAROUSEL ROW 1 (${MEDIA_MANIFEST.carouselRow1.length} photos)\n`;
+                code += `    carouselRow1: [\n`;
+                MEDIA_MANIFEST.carouselRow1.forEach((item, idx) => {
+                    const comma = idx < MEDIA_MANIFEST.carouselRow1.length - 1 ? ',' : '';
+                    const rotation = ROTATION_DATA[item.file] || 0;
+                    if (rotation !== 0) {
+                        code += `        { file: "${item.file}", rotation: ${rotation} }${comma}\n`;
+                    } else {
+                        code += `        { file: "${item.file}" }${comma}\n`;
+                    }
+                });
+                code += `    ],\n\n`;
+            }
+            
+            // Carousel Row 2
+            if (MEDIA_MANIFEST.carouselRow2) {
+                code += `    // 🎞️ CAROUSEL ROW 2 (${MEDIA_MANIFEST.carouselRow2.length} photos)\n`;
+                code += `    carouselRow2: [\n`;
+                MEDIA_MANIFEST.carouselRow2.forEach((item, idx) => {
+                    const comma = idx < MEDIA_MANIFEST.carouselRow2.length - 1 ? ',' : '';
+                    const rotation = ROTATION_DATA[item.file] || 0;
+                    if (rotation !== 0) {
+                        code += `        { file: "${item.file}", rotation: ${rotation} }${comma}\n`;
+                    } else {
+                        code += `        { file: "${item.file}" }${comma}\n`;
+                    }
+                });
+                code += `    ],\n\n`;
+            }
+            
+            // Mosaic
+            if (MEDIA_MANIFEST.mosaic) {
+                code += `    // 🖼️ MOSAIC (${MEDIA_MANIFEST.mosaic.length} photos)\n`;
+                code += `    mosaic: [\n`;
+                MEDIA_MANIFEST.mosaic.forEach((item, idx) => {
+                    const comma = idx < MEDIA_MANIFEST.mosaic.length - 1 ? ',' : '';
+                    const rotation = ROTATION_DATA[item.file] || 0;
+                    if (rotation !== 0) {
+                        code += `        { file: "${item.file}", rotation: ${rotation} }${comma}\n`;
+                    } else {
+                        code += `        { file: "${item.file}" }${comma}\n`;
+                    }
+                });
+                code += `    ],\n\n`;
+            }
+            
+            // Timeline
+            if (MEDIA_MANIFEST.timeline) {
+                code += `    // 📅 TIMELINE (${MEDIA_MANIFEST.timeline.length} photos)\n`;
+                code += `    timeline: [\n`;
+                MEDIA_MANIFEST.timeline.forEach((item, idx) => {
+                    const comma = idx < MEDIA_MANIFEST.timeline.length - 1 ? ',' : '';
+                    const rotation = ROTATION_DATA[item.file] || 0;
+                    if (rotation !== 0) {
+                        code += `        { file: "${item.file}", label: "${item.label || ''}", rotation: ${rotation} }${comma}\n`;
+                    } else {
+                        code += `        { file: "${item.file}", label: "${item.label || ''}" }${comma}\n`;
+                    }
+                });
+                code += `    ]\n`;
+            }
+            
+            code += `};\n`;
+            
+            // Show output
+            const output = document.getElementById('output');
+            const textarea = document.getElementById('code-output');
+            textarea.value = code;
+            output.style.display = 'block';
+            output.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+        
+        function copyToClipboard() {
+            const textarea = document.getElementById('code-output');
+            textarea.select();
+            document.execCommand('copy');
+            alert('✅ Code copied to clipboard! Now paste it into js/media-manifest.js');
+        }
+        
+        function downloadCode() {
+            generateCode(); // Ensure code is generated first
+            const textarea = document.getElementById('code-output');
+            const blob = new Blob([textarea.value], { type: 'text/javascript' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'media-manifest.js';
+            a.click();
+            URL.revokeObjectURL(url);
+            alert('✅ Downloaded! Replace the old media-manifest.js with this file.');
+        }
+        
+        function resetAll() {
+            if (confirm('⚠️ Reset all changes and go back to original? This cannot be undone!')) {
+                Object.keys(ORIGINAL_MANIFEST).forEach(key => {
+                    MEDIA_MANIFEST[key] = JSON.parse(JSON.stringify(ORIGINAL_MANIFEST[key]));
+                });
+                Object.keys(ROTATION_DATA).forEach(key => {
+                    delete ROTATION_DATA[key];
+                });
+                localStorage.removeItem('mediaManifestWork');
+                renderSections();
+                document.getElementById('output').style.display = 'none';
+                alert('✅ Reset complete! All changes have been reverted.');
+            }
+        }
+        
+        function clearSavedWork() {
+            if (confirm('🗑️ Clear your saved work from browser storage? Your current edits on screen will remain, but won\'t auto-restore on next visit.')) {
+                localStorage.removeItem('mediaManifestWork');
+                alert('✅ Saved work cleared! Make new edits and they will auto-save.');
+            }
+        }
+        
+        // Initialize
+        renderSections();
+    </script>
+</body>
+</html>

@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎂 HAPPY BIRTHDAY MANASI!! 🎂</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bubblegum+Sans&family=Caveat:wght@400;700&family=Fredoka:wght@400;500;600;700&family=Patrick+Hand&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- EMOJI CURSOR TRAIL (JS adds emojis as you move mouse) -->
+    <div id="cursor-trail"></div>
+
+    <!-- ════════════════════════════════════════════════════════ -->
+    <!-- ENTRANCE: THE DOORBELL                                  -->
+    <!-- ════════════════════════════════════════════════════════ -->
+    <div id="entrance">
+        <div class="doorbell-scene">
+            <div class="door">
+                <div class="door-body">
+                    <div class="peephole"></div>
+                    <div class="door-handle"></div>
+                    <div class="door-sign">🏠</div>
+                </div>
+            </div>
+            <h1 class="entrance-text">
+                <span class="wave-text" data-text="Psst... ring the doorbell!">Psst... ring the doorbell!</span>
+            </h1>
+            <button id="doorbell-btn" class="doorbell-button">
+                🔔 DING DONG! 🔔
+            </button>
+            <p class="entrance-sub">( go on, press it! don't be shy 😏 )</p>
+        </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════ -->
+    <!-- SURPRISE TRANSITION (door opens → party poppers!)       -->
+    <!-- ════════════════════════════════════════════════════════ -->
+    <div id="surprise-screen" class="hidden">
+        <div class="surprise-content">
+            <div class="party-poppers">
+                <span class="popper left">🎉</span>
+                <span class="popper right">🎊</span>
+            </div>
+            <h1 class="surprise-title">SURPRIIIIISE!!! 🥳</h1>
+            <p class="surprise-sub">You thought we forgot? AS IF! 😤</p>
+            <div class="surprise-emojis">
+                🎂🎈🎁🥳🎉🍰🎊🧁🎵🎶
+            </div>
+        </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════ -->
+    <!-- MAIN CONTENT                                            -->
+    <!-- ════════════════════════════════════════════════════════ -->
+    <main id="main-content" class="hidden">
+
+        <!-- Floating emoji rain -->
+        <div id="emoji-rain"></div>
+
+        <!-- Random popup surprises -->
+        <div id="random-popups"></div>
+
+        <!-- ═══════ HERO: SCRAPBOOK COVER ═══════ -->
+        <section id="hero" class="section">
+            <div class="scrapbook-cover">
+                <div class="tape tape-tl"></div>
+                <div class="tape tape-tr"></div>
+                <div class="sticker sticker-1">⭐</div>
+                <div class="sticker sticker-2">🦋</div>
+                <div class="sticker sticker-3">🌈</div>
+                <h1 class="hero-title">
+                    <span class="bouncy" style="--i:0">H</span><span class="bouncy" style="--i:1">A</span><span
+                        class="bouncy" style="--i:2">P</span><span class="bouncy" style="--i:3">P</span><span
+                        class="bouncy" style="--i:4">Y</span>
+                    <br>
+                    <span class="bouncy" style="--i:5">B</span><span class="bouncy" style="--i:6">I</span><span
+                        class="bouncy" style="--i:7">R</span><span class="bouncy" style="--i:8">T</span><span
+                        class="bouncy" style="--i:9">H</span><span class="bouncy" style="--i:10">D</span><span
+                        class="bouncy" style="--i:11">A</span><span class="bouncy" style="--i:12">Y</span><span
+                        class="bouncy" style="--i:13">!</span><span class="bouncy" style="--i:14">!</span><span
+                        class="bouncy" style="--i:15">!</span>
+                </h1>
+                <p class="hero-name" id="hero-name"><!-- JS fills --></p>
+                <div class="doodle-divider">✿ ✿ ✿ ✿ ✿</div>
+                <p class="hero-subtitle">( yes, this whole website is for YOU 🫵 )</p>
+                <div class="hero-arrow">👇 scroll down, it gets better 👇</div>
+            </div>
+        </section>
+
+        <!-- ═══════ SECTION: THE ROAST 🔥 ═══════ -->
+        <section id="roast" class="section">
+            <div class="section-inner">
+                <h2 class="section-title wiggly">🔥 The Birthday Roast 🔥</h2>
+                <p class="section-sub">( sorry bestie, it's tradition 😈 )</p>
+                <div class="roast-cards" id="roast-cards">
+                    <!-- JS generates roast cards -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════ SECTION: EMBARRASSING STATS ═══════ -->
+        <section id="silly-stats" class="section">
+            <div class="section-inner">
+                <h2 class="section-title wiggly">📊 Your Life in Numbers 📊</h2>
+                <p class="section-sub">( we did the math so you don't have to 🤓 )</p>
+                <div class="stats-grid" id="stats-grid">
+                    <!-- JS generates stat cards -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════ SECTION: POLAROID WALL ═══════ -->
+        <section id="polaroid-wall" class="section">
+            <div class="section-inner">
+                <h2 class="section-title wiggly">📸 The Wall of Fame (& Shame) 📸</h2>
+                <p class="section-sub">( some of these should probably be deleted ngl 💀 )</p>
+                <div class="polaroid-container" id="polaroid-container"></div>
+            </div>
+        </section>
+
+        <!-- ═══════ SECTION: PHOTO CAROUSEL ═══════ -->
+        <section id="carousel-section" class="section">
+            <div class="section-inner">
+                <h2 class="section-title wiggly">🎞️ The Highlight Reel 🎞️</h2>
+                <div class="carousel-wrapper">
+                    <div class="carousel-track" id="carousel-track"></div>
+                </div>
+                <div class="carousel-wrapper">
+                    <div class="carousel-track reverse" id="carousel-track-2"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════ SECTION: SCRATCH CARDS ═══════ -->
+        <section id="scratch-section" class="section">
+            <div class="section-inner">
+                <h2 class="section-title wiggly">🎰 Scratch to Reveal Secrets! 🎰</h2>
+                <p class="section-sub">( hover over each card to reveal embarrassing truths 😂 )</p>
+                <div class="scratch-grid" id="scratch-grid"></div>
+            </div>
+        </section>
+
+        <!-- ═══════ SECTION: SPIN THE WHEEL 🎡 ═══════ -->
+        <section id="spin-section" class="section">
+            <div class="section-inner">
+                <h2 class="section-title wiggly">🎡 Spin the Dare Wheel! 🎡</h2>
+                <p class="section-sub">( birthday edition — no backing out! 😈 )</p>
+                <div class="wheel-container">
+                    <div class="wheel-wrapper">
+                        <div class="wheel-arrow">▼</div>
+                        <canvas class="wheel-canvas" id="wheel-canvas" width="320" height="320"></canvas>
+                    </div>
+                    <button class="spin-btn" id="spin-btn">🌀 SPIN IT! 🌀</button>
+                    <p class="spin-result" id="spin-result"></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════ SECTION: MAGIC 8-BALL ═══════ -->
+        <section id="magic-8ball" class="section">
+            <div class="section-inner">
+                <h2 class="section-title wiggly">🎱 Birthday Magic 8-Ball 🎱</h2>
+                <p class="section-sub">( ask about your year ahead! )</p>
+                <div class="eight-ball-container">
+                    <div class="eight-ball" id="eight-ball">
+                        <div class="ball-front">8</div>
+                        <div class="ball-answer" id="ball-answer">Click me!</div>
+                    </div>
+                    <p class="eight-ball-hint">🫵 Click the ball to ask!</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════ SECTION: BIRTHDAY QUIZ 🧠 ═══════ -->
+        <section id="quiz-section" class="section">
+            <div class="section-inner">
+                <h2 class="section-title wiggly">🧠 How Well Do You Know Me? 🧠</h2>
+                <p class="section-sub">( let's see if you're a REAL friend 😏 )</p>
+                <div class="quiz-container" id="quiz-container"></div>
+            </div>
+        </section>
+
+        <!-- ═══════ SECTION: BLOW THE CANDLES 🕯️ ═══════ -->
+        <section id="cake-section" class="section">
+            <div class="section-inner">
+                <h2 class="section-title wiggly">🎂 Make a Wish! 🎂</h2>
+                <p class="section-sub">( click the candles to blow them out! )</p>
+                <div class="cake-container">
+                    <div class="birthday-cake" id="birthday-cake">
+                        <div class="candles-row" id="candles-row"></div>
+                        <div class="cake-top"></div>
+                        <div class="cake-middle"></div>
+                        <div class="cake-bottom"></div>
+                        <div class="cake-plate"></div>
+                    </div>
+                    <p class="cake-status" id="cake-status">Click each candle to blow it out! 🌬️</p>
+                    <button class="blow-all-btn" id="blow-all-btn">🌬️ BLOW THEM ALL! 🌬️</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════ SECTION: EXPLODING GIFT 🎁 ═══════ -->
+        <section id="gift-section" class="section">
+            <div class="section-inner">
+                <h2 class="section-title wiggly">🎁 Open Your Gift! 🎁</h2>
+                <p class="section-sub">( we got you something special 🥺 )</p>
+                <div class="gift-container">
+                    <div class="gift-box" id="gift-box">
+                        <div class="gift-box-lid"></div>
+                        <div class="gift-box-body"></div>
+                    </div>
+                    <p class="gift-hint" id="gift-hint">👆 Click the gift to open it!</p>
+                    <p class="gift-message" id="gift-message"></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════ SECTION: MOSAIC GALLERY ═══════ -->
+        <section id="mosaic" class="section">
+            <div class="section-inner">
+                <h2 class="section-title wiggly">🖼️ 200 Reasons You're Awesome 🖼️</h2>
+                <p class="section-sub">( okay maybe some of these are just funny 🤷‍♀️ )</p>
+                <div class="mosaic-grid" id="mosaic-grid"></div>
+            </div>
+        </section>
+
+        <!-- ═══════ SECTION: MEMORY TIMELINE ═══════ -->
+        <section id="timeline" class="section">
+            <div class="section-inner">
+                <h2 class="section-title wiggly">📅 Memory Lane 📅</h2>
+                <p class="section-sub">( the journey of being iconic )</p>
+                <div class="timeline-container" id="timeline-container"></div>
+            </div>
+        </section>
+
+        <!-- ═══════ SECTION: SECRET LETTER 💌 ═══════ -->
+        <section id="letter-section" class="section">
+            <div class="section-inner">
+                <h2 class="section-title wiggly">💌 A Letter Just for You 💌</h2>
+                <p class="section-sub">( no I'm not crying YOU'RE crying 😭 )</p>
+                <div class="letter-container">
+                    <div class="letter-paper">
+                        <div class="letter-stamp">❤️</div>
+                        <div class="letter-text" id="letter-text"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════ SECTION: BIRTHDAY WISHES ═══════ -->
+        <section id="wishes" class="section">
+            <div class="section-inner">
+                <h2 class="section-title wiggly">💌 What Your People Say 💌</h2>
+                <div class="wishes-grid" id="wishes-grid"></div>
+            </div>
+        </section>
+
+        <!-- ═══════ SECTION: GUESTBOOK ═══════ -->
+        <section id="guestbook" class="section">
+            <div class="section-inner">
+                <h2 class="section-title wiggly">📝 Leave a Birthday Note! 📝</h2>
+                <p class="section-sub">( write something nice... or don't 😏 )</p>
+                <div class="guestbook-form">
+                    <input type="text" id="guest-name" placeholder="Your name ✏️" maxlength="30">
+                    <textarea id="guest-wish" placeholder="Write something funny or sweet... 💬"
+                        maxlength="200"></textarea>
+                    <button id="send-wish-btn">📮 Drop it in the mailbox!</button>
+                </div>
+                <div class="notes-wall" id="notes-wall"></div>
+            </div>
+        </section>
+
+        <!-- ═══════ SECTION: PHOTO UPLOADS ═══════ -->
+        <section id="photo-upload-section" class="section">
+            <div class="section-inner">
+                <h2 class="section-title wiggly">📸 Share Your Memories! 📸</h2>
+                <p class="section-sub">( upload photos from our adventures! )</p>
+                
+                <!-- Upload Form -->
+                <div class="upload-container">
+                    <button id="upload-photo-btn" class="upload-trigger-btn">
+                        📤 Upload a Photo 📤
+                    </button>
+                    
+                    <input type="file" id="photo-file-input" accept="image/*" style="display: none;">
+                    
+                    <div id="photo-upload-form" class="upload-form-container">
+                        <div id="upload-preview" class="upload-preview"></div>
+                        
+                        <div class="upload-fields">
+                            <input type="text" id="uploader-name" placeholder="Your name ✏️" maxlength="30">
+                            <textarea id="photo-caption" placeholder="Add a caption (optional) 💬" maxlength="150"></textarea>
+                            
+                            <div class="upload-actions">
+                                <button id="submit-photo-btn" class="btn-primary">Upload Photo 📸</button>
+                                <button id="cancel-upload-btn" class="btn-secondary">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Uploaded Photos Gallery -->
+                <div class="uploaded-photos-section">
+                    <h3 class="gallery-subtitle">💝 Friend Uploads</h3>
+                    <div id="uploaded-photos-gallery" class="uploaded-photos-grid"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════ FOOTER ═══════ -->
+        <footer id="footer">
+            <div class="footer-balloons" id="footer-balloons"></div>
+            <div class="footer-content">
+                <p class="footer-big">made with 🧠 zero brain cells and ❤️ lots of love</p>
+                <p class="footer-small">HAPPY BIRTHDAY 2026!! 🎂🎉🥳</p>
+                <div class="footer-dance">🕺💃🕺💃🕺💃</div>
+            </div>
+        </footer>
+
+    </main>
+
+    <!-- LIGHTBOX -->
+    <div id="lightbox" class="lightbox-hidden">
+        <button id="lightbox-close">✕</button>
+        <button id="lightbox-prev">◀</button>
+        <button id="lightbox-next">▶</button>
+        <img id="lightbox-img" src="" alt="Photo">
+        <p id="lightbox-caption"></p>
+    </div>
+
+    <!-- CONFETTI CANVAS -->
+    <div id="confetti-canvas"></div>
+
+    <!-- PANIC BUTTON -->
+    <button id="panic-btn" title="PARTY BUTTON 🎉">🎉</button>
+
+    <!-- PROGRESS BAR -->
+    <div id="progress-bar-wrap">
+        <div id="progress-bar"></div>
+        <div id="progress-emoji">🎂</div>
+    </div>
+
+    <!-- GLITTER CONTAINER -->
+    <div id="glitter-container"></div>
+
+    <!-- FIREWORKS CANVAS -->
+    <canvas id="fireworks-canvas"></canvas>
+
+    <!-- SECTION FLASH OVERLAY -->
+    <div id="section-flash"></div>
+
+    <!-- BIRTHDAY COUNTDOWN TOAST -->
+    <div id="bday-toast" class="hidden"></div>
+
+    <!-- RAINBOW MODE INDICATOR -->
+    <div id="rainbow-indicator" class="hidden">🌈 RAINBOW MODE ACTIVATED 🌈</div>
+
+    <!-- HEARTS CONTAINER -->
+    <div id="hearts-container"></div>
+
+    <!-- 📦 MODULAR JAVASCRIPT -->
+    <!-- Supabase Client Library - Load first and wait -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" crossorigin="anonymous"></script>
+    
+    <!-- Our Scripts - Load in order after Supabase -->
+    <script defer src="js/config.js"></script>
+    <script defer src="js/supabase-config.js"></script>
+    <script defer src="js/media-manifest.js"></script>
+    <script defer src="js/utils.js"></script>
+    <script defer src="js/gallery.js"></script>
+    <script defer src="js/sections.js"></script>
+    <script defer src="js/photo-uploads.js"></script>
+    <script defer src="script.js"></script>
+</body>
+
+</html>
