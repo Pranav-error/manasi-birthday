@@ -16,3 +16,11 @@ Thumbs.db
 # Environment variables (if you add any)
 .env
 .env.local
+# Large video files (excluded due to GitHub 100MB limit)
+Pictures/YAEE1499.MP4
+Pictures/IXCD8182.MP4
+Pictures/SBKK2790.MP4
+Pictures/QTLQ3198.MP4
+Pictures/XOIW7679.MP4
+Pictures/IZEE9551.MP4
+Pictures/RQVO7639.MP4
