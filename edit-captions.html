@@ -452,6 +452,9 @@
         // Store rotation data for each file
         const ROTATION_DATA = {};
         
+        // Store view mode (full/zoom) for each file
+        const VIEW_MODE_DATA = {};
+        
         // Initialize rotation data from manifest if it exists
         Object.keys(MEDIA_MANIFEST).forEach(section => {
             MEDIA_MANIFEST[section].forEach(item => {
@@ -472,6 +475,11 @@
                 Object.keys(parsed.rotations).forEach(key => {
                     ROTATION_DATA[key] = parsed.rotations[key];
                 });
+                if (parsed.viewModes) {
+                    Object.keys(parsed.viewModes).forEach(key => {
+                        VIEW_MODE_DATA[key] = parsed.viewModes[key];
+                    });
+                }
                 console.log('✅ Loaded saved work from previous session');
                 
                 // Show restore banner
@@ -499,6 +507,7 @@
                 const workData = {
                     manifest: MEDIA_MANIFEST,
                     rotations: ROTATION_DATA,
+                    viewModes: VIEW_MODE_DATA,
                     timestamp: new Date().toISOString()
                 };
                 localStorage.setItem('mediaManifestWork', JSON.stringify(workData));
@@ -653,6 +662,11 @@
             else if (rotation === 180) rotationClass = 'rotate-180';
             else if (rotation === 270) rotationClass = 'rotate-270';
             
+            // Get view mode from VIEW_MODE_DATA
+            const isFullView = VIEW_MODE_DATA[filename] === true;
+            const viewClass = isFullView ? ' fit-contain' : '';
+            const viewBadgeText = isFullView ? '✅ Full view (click to zoom)' : '🔍 Click to toggle view';
+            
             let mediaHTML = '';
             if (isUnsupported) {
                 mediaHTML = `
@@ -670,12 +684,12 @@
             } else if (isVideo) {
                 mediaHTML = `
                     <div class="photo-wrapper" data-file="${filename}" onclick="toggleViewMode(this)">
-                        <div class="view-mode-badge">🔍 Click to toggle view</div>
+                        <div class="view-mode-badge">${viewBadgeText}</div>
                         <div class="rotation-controls">
                             <button class="rotate-btn" onclick="event.stopPropagation(); rotateMedia('${filename}', -90)" title="Rotate Left">↩️</button>
                             <button class="rotate-btn" onclick="event.stopPropagation(); rotateMedia('${filename}', 90)" title="Rotate Right">↪️</button>
                         </div>
-                        <video controls muted class="media-element ${rotationClass}" data-rotation="${rotation}">
+                        <video controls muted class="media-element ${rotationClass}${viewClass}" data-rotation="${rotation}">
                             <source src="Pictures/${encodeURIComponent(filename)}" type="video/${ext}">
                         </video>
                         <div class="media-type">📹 ${ext.toUpperCase()}</div>
@@ -684,12 +698,12 @@
             } else {
                 mediaHTML = `
                     <div class="photo-wrapper" data-file="${filename}" onclick="toggleViewMode(this)">
-                        <div class="view-mode-badge">🔍 Click to toggle view</div>
+                        <div class="view-mode-badge">${viewBadgeText}</div>
                         <div class="rotation-controls">
                             <button class="rotate-btn" onclick="event.stopPropagation(); rotateMedia('${filename}', -90)" title="Rotate Left">↩️</button>
                             <button class="rotate-btn" onclick="event.stopPropagation(); rotateMedia('${filename}', 90)" title="Rotate Right">↪️</button>
                         </div>
-                        <img src="Pictures/${encodeURIComponent(filename)}" alt="${filename}" loading="lazy" class="media-element ${rotationClass}" data-rotation="${rotation}">
+                        <img src="Pictures/${encodeURIComponent(filename)}" alt="${filename}" loading="lazy" class="media-element ${rotationClass}${viewClass}" data-rotation="${rotation}">
                         ${isGif ? '<div class="media-type">GIF</div>' : ''}
                     </div>
                 `;
@@ -842,13 +856,16 @@
             if (!mediaElement) return;
             
             const badge = wrapper.querySelector('.view-mode-badge');
+            const filename = wrapper.dataset.file;
             
             if (mediaElement.classList.contains('fit-contain')) {
                 mediaElement.classList.remove('fit-contain');
                 if (badge) badge.textContent = '🔍 Click to toggle view';
+                if (filename) VIEW_MODE_DATA[filename] = false;
             } else {
                 mediaElement.classList.add('fit-contain');
                 if (badge) badge.textContent = '✅ Full view (click to zoom)';
+                if (filename) VIEW_MODE_DATA[filename] = true;
             }
         }
         
@@ -862,13 +879,16 @@
             allMedia.forEach(media => {
                 const wrapper = media.closest('.photo-wrapper');
                 const badge = wrapper ? wrapper.querySelector('.view-mode-badge') : null;
+                const filename = wrapper ? wrapper.dataset.file : null;
                 
                 if (shouldContain) {
                     media.classList.add('fit-contain');
                     if (badge) badge.textContent = '✅ Full view (click to zoom)';
+                    if (filename) VIEW_MODE_DATA[filename] = true;
                 } else {
                     media.classList.remove('fit-contain');
                     if (badge) badge.textContent = '🔍 Click to toggle view';
+                    if (filename) VIEW_MODE_DATA[filename] = false;
                 }
             });
         }
@@ -1056,6 +1076,9 @@ const MEDIA_MANIFEST = {
                 });
                 Object.keys(ROTATION_DATA).forEach(key => {
                     delete ROTATION_DATA[key];
+                });
+                Object.keys(VIEW_MODE_DATA).forEach(key => {
+                    delete VIEW_MODE_DATA[key];
                 });
                 localStorage.removeItem('mediaManifestWork');
                 renderSections();
