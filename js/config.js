@@ -106,34 +106,8 @@ const CONFIG = {
         "💑 Text your crush 'hey' (no chickening out!)",
     ],
 
-    // Birthday quiz
-    quizQuestions: [
-        {
-            q: "What's the birthday person's go-to comfort food?",
-            options: ["🍕 Pizza", "🍜 Noodles", "🍦 Ice Cream", "🍫 Chocolate"],
-            answer: 0
-        },
-        {
-            q: "What would they do with a million dollars?",
-            options: ["🏠 Buy a mansion", "✈️ Travel the world", "💰 Save it all", "🛍️ Shop till they drop"],
-            answer: 1
-        },
-        {
-            q: "What's their biggest fear?",
-            options: ["🕷️ Spiders", "👻 Ghosts", "📱 Dead phone battery", "🙅 Being basic"],
-            answer: 2
-        },
-        {
-            q: "If they were a Disney character, who would they be?",
-            options: ["👸 Rapunzel", "❄️ Elsa", "🧔 Moana", "🤡 Goofy"],
-            answer: 3
-        },
-        {
-            q: "What time do they ACTUALLY wake up on weekends?",
-            options: ["☀️ 7am early bird", "🌅 10am reasonable", "🌞 12pm brunch time", "🌙 2pm... it's basically evening"],
-            answer: 3
-        },
-    ],
+    // Birthday quiz (section replaced by Eras)
+    quizQuestions: [],
 
     // Gift messages
     giftMessages: [

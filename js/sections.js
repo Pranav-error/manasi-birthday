@@ -139,80 +139,35 @@ function setupCake() {
 }
 
 /* ──────────────────────────────────────────────────────────────
-   BIRTHDAY QUIZ 🧠
+   THE MANASI ERAS 🌟
    ────────────────────────────────────────────────────────────── */
-function setupBirthdayQuiz() {
-    const container = $('#quiz-container');
-    const questions = CONFIG.quizQuestions;
-    let currentQ = 0;
-    let score = 0;
+function setupEras() {
+    const grid = $('#eras-grid');
+    if (!grid) return;
 
-    function renderQuestion() {
-        const q = questions[currentQ];
+    const eras = [
+        { emoji: '👶', title: 'The Origin Era',        desc: 'Before we knew what hit us. A legend was born.',         color: '#fde68a' },
+        { emoji: '📚', title: 'The Study Era',          desc: 'Somehow doing it all while making it look effortless.',  color: '#bbf7d0' },
+        { emoji: '💅', title: 'The Glow Up Era',        desc: 'She woke up and chose to slay. Every. Single. Day.',     color: '#fbcfe8' },
+        { emoji: '🤣', title: 'The Chaotic Era',        desc: 'No context needed. You had to be there.',                color: '#fed7aa' },
+        { emoji: '🌍', title: 'The Adventure Era',      desc: 'Showed up everywhere and made everywhere better.',       color: '#bfdbfe' },
+        { emoji: '👯', title: 'The Squad Era',          desc: 'She collected good people like it was her job.',         color: '#ddd6fe' },
+        { emoji: '🎤', title: 'The Main Character Era', desc: 'Plot armour: confirmed. Camera always finds her.',        color: '#fecdd3' },
+        { emoji: '🌸', title: 'The Right Now Era',      desc: 'The best version yet — and it only gets better.',        color: '#ccfbf1' },
+    ];
+
+    eras.forEach((era, i) => {
         const card = document.createElement('div');
-        card.className = 'quiz-card';
+        card.className = 'era-card reveal';
+        card.style.setProperty('--era-color', era.color);
+        card.style.animationDelay = (i * 0.08) + 's';
         card.innerHTML = `
-            <p class="quiz-progress">Question ${currentQ + 1} of ${questions.length}</p>
-            <h3 class="quiz-question">${q.q}</h3>
-            <div class="quiz-options">
-                ${q.options.map((opt, i) => `<button class="quiz-option" data-idx="${i}">${opt}</button>`).join('')}
-            </div>
+            <div class="era-emoji">${era.emoji}</div>
+            <div class="era-title">${era.title}</div>
+            <div class="era-desc">${era.desc}</div>
         `;
-        container.innerHTML = '';
-        container.appendChild(card);
-
-        card.querySelectorAll('.quiz-option').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const idx = parseInt(btn.dataset.idx);
-                const isCorrect = idx === q.answer;
-
-                card.querySelectorAll('.quiz-option').forEach(b => {
-                    b.style.pointerEvents = 'none';
-                    if (parseInt(b.dataset.idx) === q.answer) b.classList.add('correct');
-                    else if (b === btn && !isCorrect) b.classList.add('wrong');
-                });
-
-                if (isCorrect) score++;
-
-                setTimeout(() => {
-                    currentQ++;
-                    if (currentQ < questions.length) {
-                        renderQuestion();
-                    } else {
-                        showResults();
-                    }
-                }, 1200);
-            });
-        });
-    }
-
-    function showResults() {
-        const pct = Math.round((score / questions.length) * 100);
-        let msg;
-        if (pct === 100) msg = "You're basically a stalker 👀💯 Perfect score!!";
-        else if (pct >= 60) msg = "Not bad! You actually pay attention 🤩";
-        else if (pct >= 40) msg = "Hmm... do you even KNOW this person? 🤔";
-        else msg = "Did you just guess randomly?? 💯 fake friend behavior 😂";
-
-        container.innerHTML = `
-            <div class="quiz-card">
-                <h3 class="quiz-question">🏆 Quiz Complete!</h3>
-                <p class="quiz-score">${score}/${questions.length}</p>
-                <p class="quiz-result-text">${msg}</p>
-                <button class="quiz-restart-btn" id="quiz-restart">🔁 Try Again</button>
-            </div>
-        `;
-
-        launchConfetti(pct >= 60 ? 80 : 20);
-
-        $('#quiz-restart').addEventListener('click', () => {
-            currentQ = 0;
-            score = 0;
-            renderQuestion();
-        });
-    }
-
-    renderQuestion();
+        grid.appendChild(card);
+    });
 }
 
 /* ──────────────────────────────────────────────────────────────
