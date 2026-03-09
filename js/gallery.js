@@ -128,7 +128,8 @@ function generateTimeline() {
         card.className = 'timeline-card';
 
         const mediaWrap = createMediaElement(photo.file, {
-            containerStyle: 'width:100%;height:180px;overflow:hidden;'
+            containerStyle: 'width:100%;height:180px;overflow:hidden;background:#111;',
+            objectFit: 'contain'
         });
         card.appendChild(mediaWrap);
 

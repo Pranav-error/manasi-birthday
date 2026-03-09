@@ -92,7 +92,7 @@ function createMediaElement(filename, opts = {}) {
         vid.preload = 'metadata';
         if (opts.controls) vid.controls = true;
         vid.className = opts.className || '';
-        vid.style.cssText = 'width:100%;height:100%;object-fit:cover;' + rotationStyle;
+        vid.style.cssText = 'width:100%;height:100%;object-fit:' + (opts.objectFit || 'cover') + ';' + rotationStyle;
         vid.onerror = () => {
             vid.remove();
             container.innerHTML = buildPlaceholder();
@@ -104,7 +104,7 @@ function createMediaElement(filename, opts = {}) {
         if (opts.lazy !== false) img.loading = 'lazy';
         img.alt = opts.alt || 'Memory';
         img.className = opts.className || '';
-        img.style.cssText = 'width:100%;height:100%;object-fit:cover;' + rotationStyle;
+        img.style.cssText = 'width:100%;height:100%;object-fit:' + (opts.objectFit || 'cover') + ';' + rotationStyle;
         img.onerror = () => {
             img.remove();
             container.innerHTML = buildPlaceholder();
