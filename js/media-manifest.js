@@ -3,7 +3,7 @@
    ═══════════════════════════════════════════════════════════════
    
    ✨ Last edited: 7/3/2026, 11:17:39 PM
-   🎯 Total files: 237
+   🎯 Total files: 259
    
    ═══════════════════════════════════════════════════════════════ */
 
@@ -124,7 +124,7 @@ const MEDIA_MANIFEST = {
         { file: "JYNP8973.JPG" }
     ],
 
-    // 🖼️ MOSAIC (106 photos)
+    // 🖼️ MOSAIC (128 photos)
     mosaic: [
         { file: "NKUZ8795.JPG" },
         { file: "NLAQ8491.JPG" },
@@ -231,7 +231,29 @@ const MEDIA_MANIFEST = {
         { file: "XUBD8353.JPG" },
         { file: "XVOT9286.JPG" },
         { file: "YAEE1499.MP4" },
-        { file: "YKLR2144.JPG" }
+        { file: "YKLR2144.JPG" },
+        { file: "00104945-ADA3-42EB-BE01-F2680DCD7E23_1_102_o.jpeg" },
+        { file: "03fbdbac-fe30-49d6-aed8-3b2bc47820ad.JPG" },
+        { file: "07f366cd-daeb-4e97-b59a-a1c76b03ee32.JPG" },
+        { file: "0888c1d5-b01a-40c6-bd22-6668ccf61ab2.JPG" },
+        { file: "1000343947.MP4" },
+        { file: "2d1bc087-2e07-4a1c-809c-8bc06f93def6.JPG" },
+        { file: "43eba1b2-19fa-484f-961c-91debaabc2d2.JPG" },
+        { file: "476faad6-c024-4487-babc-104fcb2e1558.JPG" },
+        { file: "55ff6bd1-b45a-47b2-a89b-4f66c9e78941.JPG" },
+        { file: "56589113-f131-4d1e-8f74-ad30b421c56b.JPG" },
+        { file: "683222b8-e2d8-4817-b8d4-dbc1f64cf183.JPG" },
+        { file: "78eab07d-ede7-40e5-a132-594dbdcdcfe7.JPG" },
+        { file: "88ca3e95-68c4-4028-8c2f-cde9dba264bb.JPG" },
+        { file: "98c58d95-490e-4de4-9267-368046ea8c0c.JPG" },
+        { file: "ALUL9827 1.JPG" },
+        { file: "FXBW9600.JPG" },
+        { file: "IMG_0308.HEIC" },
+        { file: "IMG_0310.HEIC" },
+        { file: "IMG_0313.HEIC" },
+        { file: "QQCKE7897.HEIC" },
+        { file: "a94158ee-3bf8-4a4d-a72c-335d5e817fd2.JPG" },
+        { file: "af40af67-87ac-4592-bffe-ec6773877097.JPG" }
     ],
 
     // 📅 TIMELINE (28 photos)
