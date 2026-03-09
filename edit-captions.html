@@ -39,6 +39,10 @@
         .ab.v  { background: #e0e7ff; color: #4338ca; }
         .ab.rl, .ab.rr { background: #fef3c7; color: #92400e; }
         .ab.d  { background: #fee2e2; color: #b91c1c; }
+        .ab.mv { background: #d1fae5; color: #065f46; }
+        .move-row { display: flex; gap: 5px; align-items: center; margin-top: 2px; }
+        .move-row select { flex: 1; padding: 5px 6px; border: 1.5px solid #d1d5db; border-radius: 6px; font-size: 0.75rem; background: white; cursor: pointer; }
+        .move-row select:focus { outline: none; border-color: #667eea; }
         .rot90  { transform: rotate(90deg);  }
         .rot180 { transform: rotate(180deg); }
         .rot270 { transform: rotate(270deg); }
@@ -508,6 +512,24 @@ function mkCard(it,sec,cap,tl){
     acts.appendChild(mkb('rr','Rot R',    function(){ rotate(f, 90); }));
     acts.appendChild(mkb('d', 'Delete',   function(){ delPhoto(sec,f,card); }));
     body.appendChild(acts);
+
+    var mvRow=document.createElement('div');
+    mvRow.className='move-row';
+    var sel=document.createElement('select');
+    sel.innerHTML='<option value="">— Move to section —</option>';
+    SEC.forEach(function(sm){
+        if(sm.k===sec) return;
+        var o=document.createElement('option');
+        o.value=sm.k; o.textContent=sm.n;
+        sel.appendChild(o);
+    });
+    var mvBtn=document.createElement('button');
+    mvBtn.className='ab mv'; mvBtn.textContent='Move';
+    mvBtn.onclick=function(){ if(sel.value) movePhoto(sec,f,sel.value,card); };
+    mvRow.appendChild(sel);
+    mvRow.appendChild(mvBtn);
+    body.appendChild(mvRow);
+
     card.appendChild(body);
     return card;
 }
@@ -559,6 +581,48 @@ function delPhoto(sec,f,card){
     card.remove();
     var el=document.getElementById('cnt-'+sec);
     if(el) el.textContent=M[sec].length+' photos';
+}
+
+function movePhoto(fromSec, f, toSec, card){
+    // Find the item in source section
+    var idx=M[fromSec].findIndex(function(i){ return i.file===f; });
+    if(idx===-1) return;
+    var item=Object.assign({},M[fromSec][idx]);
+
+    // Clean up caption/label fields that don't belong in target section
+    var toSM=SEC.find(function(s){ return s.k===toSec; });
+    if(toSM){
+        if(!toSM.tl) delete item.label;
+        if(!toSM.cap) delete item.caption;
+    }
+
+    // Move: remove from source, add to target
+    M[fromSec].splice(idx,1);
+    M[toSec].push(item);
+
+    // Update source count
+    var srcEl=document.getElementById('cnt-'+fromSec);
+    if(srcEl) srcEl.textContent=M[fromSec].length+' photos';
+
+    // Remove card from DOM
+    card.remove();
+
+    // Append new card to target section grid
+    var toSMeta=SEC.find(function(s){ return s.k===toSec; });
+    var newCard=mkCard(item, toSec, toSMeta?toSMeta.cap:false, toSMeta?toSMeta.tl:false);
+    var grids=document.querySelectorAll('.grid');
+    var targetGrid=null;
+    document.querySelectorAll('.section-hdr').forEach(function(hdr,i){
+        if(hdr.querySelector('#cnt-'+toSec)) targetGrid=grids[i];
+    });
+    if(targetGrid){
+        targetGrid.appendChild(newCard);
+        var tgtEl=document.getElementById('cnt-'+toSec);
+        if(tgtEl) tgtEl.textContent=M[toSec].length+' photos';
+        newCard.scrollIntoView({behavior:'smooth', block:'center'});
+        newCard.style.outline='3px solid #667eea';
+        setTimeout(function(){ newCard.style.outline=''; },1500);
+    }
 }
 
 function generate(){
