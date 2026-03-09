@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Photo Captions</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 20px; min-height: 100vh; }
+        .container { max-width: 1400px; margin: 0 auto; background: white; border-radius: 20px; padding: 30px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+        h1 { text-align: center; color: #667eea; margin-bottom: 8px; font-size: 2.2rem; }
+        .subtitle { text-align: center; color: #888; margin-bottom: 24px; }
+        .top-bar { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-bottom: 30px; padding: 18px; background: #f8f9ff; border-radius: 12px; }
+        .btn { padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; font-size: 0.95rem; font-weight: 600; transition: transform 0.1s; }
+        .btn:hover { transform: translateY(-1px); opacity: 0.9; }
+        .btn-purple { background: linear-gradient(135deg, #667eea, #764ba2); color: white; }
+        .btn-green  { background: #22c55e; color: white; }
+        .btn-orange { background: #f97316; color: white; }
+        .btn-gray   { background: #6b7280; color: white; }
+        .btn-red    { background: #ef4444; color: white; }
+        .section-hdr { background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 13px 22px; border-radius: 10px; margin: 28px 0 14px; font-size: 1.25rem; font-weight: bold; display: flex; justify-content: space-between; align-items: center; }
+        .section-hdr .cnt { font-size: 0.88rem; opacity: 0.85; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(255px, 1fr)); gap: 18px; margin-bottom: 10px; }
+        .card { border: 2px solid #e5e7eb; border-radius: 12px; overflow: hidden; background: #fafafa; }
+        .card:hover { box-shadow: 0 4px 18px rgba(0,0,0,0.1); }
+        .photo-box { width: 100%; height: 215px; overflow: hidden; background: #111; cursor: pointer; position: relative; }
+        .photo-box img, .photo-box video { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .photo-box.full img, .photo-box.full video { object-fit: contain; }
+        .hint { position: absolute; bottom: 5px; right: 7px; background: rgba(0,0,0,0.5); color: #fff; font-size: 0.68rem; padding: 2px 6px; border-radius: 8px; pointer-events: none; }
+        .heic-box { width: 100%; height: 215px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #f3f4f6; color: #9ca3af; font-size: 0.82rem; gap: 6px; }
+        .heic-box .ico { font-size: 2.4rem; }
+        .card-body { padding: 11px; display: flex; flex-direction: column; gap: 7px; }
+        .fname { font-size: 0.7rem; color: #aaa; word-break: break-all; }
+        .cap { width: 100%; padding: 7px 10px; border: 1.5px solid #d1d5db; border-radius: 7px; font-size: 0.88rem; outline: none; }
+        .cap:focus { border-color: #667eea; }
+        .no-cap { font-size: 0.78rem; color: #ddd; font-style: italic; }
+        .actions { display: flex; gap: 5px; }
+        .ab { flex: 1; padding: 5px 4px; border: none; border-radius: 6px; cursor: pointer; font-size: 0.75rem; font-weight: 600; }
+        .ab.v  { background: #e0e7ff; color: #4338ca; }
+        .ab.rl, .ab.rr { background: #fef3c7; color: #92400e; }
+        .ab.d  { background: #fee2e2; color: #b91c1c; }
+        .rot90  { transform: rotate(90deg);  }
+        .rot180 { transform: rotate(180deg); }
+        .rot270 { transform: rotate(270deg); }
+        #out-area { display: none; margin-top: 30px; padding: 20px; background: #1e1e2e; border-radius: 12px; }
+        #out-area h2 { color: #cdd6f4; margin-bottom: 10px; font-size: 1.05rem; }
+        #code-ta { width: 100%; height: 300px; background: #181825; color: #cdd6f4; border: none; border-radius: 8px; padding: 13px; font-family: monospace; font-size: 0.8rem; resize: vertical; }
+        .out-btns { display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>📸 Edit Photo Captions</h1>
+    <p class="subtitle">All photos from manifest &bull; Click photo to toggle zoom &bull; Rotate &bull; Delete &bull; Edit captions</p>
+    <div class="top-bar">
+        <button class="btn btn-purple" onclick="generate()">✨ Generate Code</button>
+        <button class="btn btn-green"  onclick="copyCode()">📋 Copy Code</button>
+        <button class="btn btn-orange" onclick="dlCode()">⬇️ Download File</button>
+        <button class="btn btn-gray"   onclick="toggleAll()">👁️ Toggle All Zoom</button>
+        <button class="btn btn-red"    onclick="clearSaved()">🗑️ Clear Saved Work</button>
+    </div>
+    <div id="sections"></div>
+    <div id="out-area">
+        <h2>📋 Copy everything below &rarr; paste into <code>js/media-manifest.js</code> and save the file</h2>
+        <textarea id="code-ta" readonly></textarea>
+        <div class="out-btns">
+            <button class="btn btn-green"  onclick="copyCode()">📋 Copy to Clipboard</button>
+            <button class="btn btn-orange" onclick="dlCode()">⬇️ Download as media-manifest.js</button>
+        </div>
+    </div>
+</div>
+
+<script>
+(function(){
+    var s=document.createElement('script');
+    s.src='js/media-manifest.js?v='+Date.now();
+    s.onload=boot;
+    s.onerror=function(){ document.getElementById('sections').innerHTML='<p style="color:red;padding:30px;font-size:1.2rem">Could not load js/media-manifest.js. Open this file via Live Server (right-click index.html > Open with Live Server) rather than directly from Finder.</p>'; };
+    document.head.appendChild(s);
+})();
+</script>
+
+<script>
+var M, ROT={}, VF={}, DEL={}, SK='ecap3';
+
+function boot(){
+    M = JSON.parse(JSON.stringify(MEDIA_MANIFEST));
+    Object.keys(M).forEach(function(sec){
+        M[sec].forEach(function(it){ if(it.rotation) ROT[it.file]=it.rotation; });
+    });
+    var raw = localStorage.getItem(SK);
+    if(raw){
+        try{
+            var sv = JSON.parse(raw);
+            var cm={}, lm={};
+            Object.keys(sv.manifest||{}).forEach(function(sec){
+                (sv.manifest[sec]||[]).forEach(function(it){
+                    if(it.caption) cm[it.file]=it.caption;
+                    if(it.label)   lm[it.file]=it.label;
+                });
+            });
+            Object.keys(M).forEach(function(sec){
+                M[sec].forEach(function(it){
+                    if(cm[it.file]) it.caption=cm[it.file];
+                    if(lm[it.file]) it.label=lm[it.file];
+                });
+            });
+            Object.keys(sv.deleted||{}).forEach(function(sec){
+                if(!M[sec]) return;
+                var ds=new Set(sv.deleted[sec]);
+                M[sec]=M[sec].filter(function(i){ return !ds.has(i.file); });
+            });
+            Object.assign(ROT, sv.rotations||{});
+            Object.assign(VF,  sv.vf||{});
+            DEL = sv.deleted||{};
+        }catch(e){}
+    }
+    render();
+    setInterval(doSave, 3000);
+}
+
+function doSave(){
+    document.querySelectorAll('.cap').forEach(function(el){
+        var sec=el.dataset.s, f=el.dataset.f, t=el.dataset.t;
+        if(!M[sec]) return;
+        var it=M[sec].find(function(i){ return i.file===f; });
+        if(!it) return;
+        if(t==='label') it.label=el.value; else it.caption=el.value;
+    });
+    try{ localStorage.setItem(SK, JSON.stringify({manifest:M, rotations:ROT, vf:VF, deleted:DEL})); }catch(e){}
+}
+
+var SEC=[
+    {k:'polaroids',    n:'Polaroid Wall',  cap:true,  tl:false},
+    {k:'carouselRow1', n:'Carousel Row 1', cap:false, tl:false},
+    {k:'carouselRow2', n:'Carousel Row 2', cap:false, tl:false},
+    {k:'mosaic',       n:'Mosaic',         cap:false, tl:false},
+    {k:'timeline',     n:'Timeline',       cap:true,  tl:true }
+];
+
+function render(){
+    var root=document.getElementById('sections');
+    root.innerHTML='';
+    SEC.forEach(function(sm){
+        var items=M[sm.k];
+        if(!items||!items.length) return;
+        var hdr=document.createElement('div');
+        hdr.className='section-hdr';
+        hdr.innerHTML='<span>'+sm.n+'</span><span class="cnt" id="cnt-'+sm.k+'">'+items.length+' photos</span>';
+        root.appendChild(hdr);
+        var grid=document.createElement('div');
+        grid.className='grid';
+        items.forEach(function(it){ grid.appendChild(mkCard(it,sm.k,sm.cap,sm.tl)); });
+        root.appendChild(grid);
+    });
+}
+
+function mkCard(it,sec,cap,tl){
+    var f=it.file;
+    var ext=f.split('.').pop().toLowerCase();
+    var isVid=['mp4','mov','webm'].includes(ext);
+    var isHeic=ext==='heic';
+    var rot=ROT[f]||0;
+    var full=VF[f]||false;
+
+    var card=document.createElement('div');
+    card.className='card';
+    card.dataset.f=f; card.dataset.s=sec;
+
+    var box=document.createElement('div');
+    if(isHeic){
+        box.className='heic-box';
+        box.innerHTML='<div class="ico">📱</div><div>HEIC — cannot preview in browser</div><div style="font-size:0.65rem;word-break:break-all;padding:0 8px;text-align:center">'+f+'</div>';
+    } else {
+        box.className='photo-box'+(full?' full':'');
+        box.dataset.f=f;
+        box.title='Click to toggle zoom / full view';
+        box.addEventListener('click',function(){ toggleView(f); });
+        var media;
+        if(isVid){
+            media=document.createElement('video');
+            media.src='Pictures/'+encodeURIComponent(f);
+            media.controls=true; media.muted=true;
+        } else {
+            media=document.createElement('img');
+            media.src='Pictures/'+encodeURIComponent(f);
+            media.alt=f; media.loading='lazy';
+        }
+        if(rot) media.className='rot'+rot;
+        box.appendChild(media);
+        var hint=document.createElement('div');
+        hint.className='hint';
+        hint.textContent=full?'zoom':'full';
+        box.appendChild(hint);
+    }
+    card.appendChild(box);
+
+    var body=document.createElement('div');
+    body.className='card-body';
+
+    var fd=document.createElement('div');
+    fd.className='fname'; fd.textContent=f;
+    body.appendChild(fd);
+
+    if(cap){
+        var inp=document.createElement('input');
+        inp.type='text'; inp.className='cap';
+        inp.dataset.s=sec; inp.dataset.f=f; inp.dataset.t=tl?'label':'caption';
+        inp.value=tl?(it.label||''):(it.caption||'');
+        inp.placeholder=tl?'e.g. Summer 2024':'e.g. best day ever!';
+        body.appendChild(inp);
+    } else {
+        var nd=document.createElement('div');
+        nd.className='no-cap'; nd.textContent='no caption for this section';
+        body.appendChild(nd);
+    }
+
+    var acts=document.createElement('div');
+    acts.className='actions';
+    function mkb(cls,txt,fn){ var b=document.createElement('button'); b.className='ab '+cls; b.textContent=txt; b.onclick=fn; return b; }
+    acts.appendChild(mkb('v', 'View',     function(){ toggleView(f); }));
+    acts.appendChild(mkb('rl','Rot L',    function(){ rotate(f,-90); }));
+    acts.appendChild(mkb('rr','Rot R',    function(){ rotate(f, 90); }));
+    acts.appendChild(mkb('d', 'Delete',   function(){ delPhoto(sec,f,card); }));
+    body.appendChild(acts);
+    card.appendChild(body);
+    return card;
+}
+
+function toggleView(f){
+    VF[f]=!VF[f];
+    var full=VF[f];
+    document.querySelectorAll('.photo-box[data-f="'+f+'"]').forEach(function(b){
+        b.classList.toggle('full',full);
+        var h=b.querySelector('.hint');
+        if(h) h.textContent=full?'zoom':'full';
+    });
+}
+
+function toggleAll(){
+    var boxes=document.querySelectorAll('.photo-box');
+    if(!boxes.length) return;
+    var goFull=!boxes[0].classList.contains('full');
+    boxes.forEach(function(b){
+        var f=b.dataset.f; if(!f) return;
+        VF[f]=goFull;
+        b.classList.toggle('full',goFull);
+        var h=b.querySelector('.hint');
+        if(h) h.textContent=goFull?'zoom':'full';
+    });
+}
+
+function rotate(f,deg){
+    var cur=ROT[f]||0;
+    var next=((cur+deg)%360+360)%360;
+    ROT[f]=next;
+    document.querySelectorAll('.card[data-f="'+f+'"]').forEach(function(c){
+        var m=c.querySelector('img,video');
+        if(m) m.className=next?'rot'+next:'';
+    });
+    Object.keys(M).forEach(function(sec){
+        M[sec].forEach(function(it){
+            if(it.file!==f) return;
+            if(next===0) delete it.rotation; else it.rotation=next;
+        });
+    });
+}
+
+function delPhoto(sec,f,card){
+    if(!confirm('Remove "'+f+'" from '+sec+'?')) return;
+    M[sec]=M[sec].filter(function(i){ return i.file!==f; });
+    if(!DEL[sec]) DEL[sec]=[];
+    DEL[sec].push(f);
+    card.remove();
+    var el=document.getElementById('cnt-'+sec);
+    if(el) el.textContent=M[sec].length+' photos';
+}
+
+function generate(){
+    doSave();
+    var total=Object.values(M).reduce(function(a,b){ return a+b.length; },0);
+    var L=[];
+    L.push('/* ================================================================');
+    L.push('   MEDIA MANIFEST - EDITED WITH VISUAL TOOL');
+    L.push('   ================================================================');
+    L.push('   Last edited: '+new Date().toLocaleString());
+    L.push('   Total files: '+total);
+    L.push('   ================================================================ */');
+    L.push('');
+    L.push('const MEDIA_MANIFEST = {');
+    L.push('    ');
+    SEC.forEach(function(sm,si){
+        var items=M[sm.k];
+        if(!items) return;
+        var isLast=(si===SEC.length-1);
+        L.push('    // '+sm.n+' ('+items.length+' photos)');
+        L.push('    '+sm.k+': [');
+        items.forEach(function(it,idx){
+            var comma=idx<items.length-1?',':'';
+            var rot=ROT[it.file]||it.rotation||0;
+            var parts=['file: "'+it.file+'"'];
+            if(sm.cap&&!sm.tl&&it.caption) parts.push('caption: "'+(it.caption||'').replace(/"/g,'\\"')+'"');
+            if(sm.cap&&sm.tl&&it.label)    parts.push('label: "'+(it.label||'').replace(/"/g,'\\"')+'"');
+            if(rot) parts.push('rotation: '+rot);
+            L.push('        { '+parts.join(', ')+' }'+comma);
+        });
+        L.push('    ]'+(isLast?'':','));
+        L.push('');
+    });
+    L.push('};');
+    var code=L.join('\n');
+    document.getElementById('code-ta').value=code;
+    document.getElementById('out-area').style.display='block';
+    document.getElementById('out-area').scrollIntoView({behavior:'smooth'});
+}
+
+function copyCode(){
+    var ta=document.getElementById('code-ta');
+    if(!ta.value) generate();
+    ta.select();
+    document.execCommand('copy');
+    alert('Copied! Paste into js/media-manifest.js and save the file.');
+}
+
+function dlCode(){
+    if(!document.getElementById('code-ta').value) generate();
+    var blob=new Blob([document.getElementById('code-ta').value],{type:'text/javascript'});
+    var url=URL.createObjectURL(blob);
+    var a=document.createElement('a');
+    a.href=url; a.download='media-manifest.js'; a.click();
+    URL.revokeObjectURL(url);
+}
+
+function clearSaved(){
+    if(confirm('Clear all saved captions/rotations from this browser?\nThe manifest JS file will NOT be changed.')){
+        localStorage.removeItem(SK);
+        alert('Cleared. Reloading...');
+        location.reload();
+    }
+}
+</script>
+</body>
+</html>
