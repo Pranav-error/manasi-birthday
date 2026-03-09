@@ -650,6 +650,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: 60px 40px;
     background: repeating-linear-gradient(0deg,
             transparent,
             transparent 31px,
@@ -661,12 +662,13 @@ body {
     text-align: center;
     padding: 60px 40px;
     position: relative;
-    max-width: 700px;
+    width: min(700px, calc(100vw - 80px));
     background: white;
     border-radius: 20px;
     border: var(--border-chunky);
     box-shadow: var(--shadow-pop), 0 0 0 8px var(--yellow);
     transform: rotate(-1deg);
+    box-sizing: border-box;
 }
 
 /* Tape strips */
@@ -851,6 +853,136 @@ body {
     }
 }
 
+
+/* ═══════════════════════════════════════════════════════════════
+   TURNING 21 🍾
+   ═══════════════════════════════════════════════════════════════ */
+#turning-21 {
+    background: linear-gradient(135deg, #fff7ed, #fdf4ff, #f0fdf4);
+    overflow: hidden;
+}
+
+.twenty-one-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+}
+
+.twenty-one-big {
+    font-family: var(--font-bubble);
+    font-size: clamp(6rem, 22vw, 14rem);
+    line-height: 1;
+    background: linear-gradient(135deg, #f472b6, #a855f7, #fb923c);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(4px 6px 0 rgba(168,85,247,0.25));
+    animation: bigNumBounce 2.5s ease-in-out infinite;
+    user-select: none;
+}
+
+@keyframes bigNumBounce {
+    0%, 100% { transform: translateY(0) rotate(-2deg); }
+    50%       { transform: translateY(-12px) rotate(2deg); }
+}
+
+/* Meme before/after cards */
+.meme-cards-grid {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.meme-card {
+    background: white;
+    border: var(--border-chunky);
+    border-radius: 20px;
+    padding: 22px 20px;
+    width: 210px;
+    text-align: center;
+    box-shadow: var(--shadow-fun);
+    transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+}
+.meme-card:not(.meme-card-vs):hover { transform: scale(1.06) rotate(1deg); }
+
+.meme-card-vs {
+    font-family: var(--font-bubble);
+    font-size: 2.2rem;
+    color: var(--hot-pink);
+    background: none;
+    border: none;
+    box-shadow: none;
+    width: auto;
+    padding: 0 4px;
+}
+
+.meme-top {
+    font-family: var(--font-fun);
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-light);
+    margin-bottom: 14px;
+}
+
+.meme-img {
+    font-size: 4.5rem;
+    line-height: 1;
+    margin-bottom: 14px;
+}
+
+.meme-bottom {
+    font-family: var(--font-handwriting);
+    font-size: 1.05rem;
+    color: var(--text);
+    line-height: 1.4;
+}
+
+/* Perks list */
+.twenty-one-perks {
+    background: white;
+    border: var(--border-chunky);
+    border-radius: 24px;
+    padding: 28px 32px;
+    max-width: 560px;
+    width: 100%;
+    box-shadow: var(--shadow-fun);
+    transform: rotate(0.5deg);
+}
+
+.perks-title {
+    font-family: var(--font-bubble);
+    font-size: 1.4rem;
+    color: var(--hot-pink);
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.perks-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.perk-item {
+    font-family: var(--font-handwriting);
+    font-size: 1.15rem;
+    color: var(--text);
+    line-height: 1.4;
+    padding: 10px 16px;
+    background: linear-gradient(90deg, #fdf4ff, #fff7ed);
+    border-radius: 12px;
+    border-left: 4px solid var(--hot-pink);
+    transition: transform 0.2s, background 0.2s;
+}
+.perk-item:hover {
+    transform: translateX(6px);
+    background: linear-gradient(90deg, #fce7f3, #fdf4ff);
+}
 
 /* ═══════════════════════════════════════════════════════════════
    ROAST SECTION 🔥

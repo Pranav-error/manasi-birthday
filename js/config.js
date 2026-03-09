@@ -25,11 +25,11 @@ const CONFIG = {
 
     // Silly life stats
     sillyStats: [
-        { emoji: "😴", number: "4,380+", label: "Naps taken (and counting)" },
+        { emoji: "😴", number: "7,665+", label: "Naps taken (and counting)" },
         { emoji: "🍕", number: "2,847", label: "Pizza slices consumed" },
         { emoji: "🤳", number: "∞", label: "Selfies in camera roll" },
         { emoji: "😂", number: "50,000+", label: "Times you made us laugh" },
-        { emoji: "☕", number: "9,125", label: "Cups of coffee ☕ needed" },
+        { emoji: "☕", number: "3,650+", label: "Cups of coffee ☕ needed" },
         { emoji: "📱", number: "3 days", label: "Avg text reply time" },
         { emoji: "🎵", number: "42,069", label: "Songs played on repeat" },
         { emoji: "🛒", number: "∞", label: '"I need this" purchases' },
