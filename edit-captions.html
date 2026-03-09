@@ -479,9 +479,42 @@
         if (savedWork) {
             try {
                 const parsed = JSON.parse(savedWork);
-                Object.keys(parsed.manifest).forEach(key => {
-                    MEDIA_MANIFEST[key] = parsed.manifest[key];
+                
+                // Build a lookup of saved captions/labels by filename
+                // so we can MERGE saved edits into the current manifest
+                // instead of replacing it (which would wipe new photos)
+                const savedCaptions = {};
+                const savedLabels = {};
+                Object.keys(parsed.manifest).forEach(section => {
+                    parsed.manifest[section].forEach(item => {
+                        if (item.caption) savedCaptions[item.file] = item.caption;
+                        if (item.label) savedLabels[item.file] = item.label;
+                    });
                 });
+                
+                // Apply saved captions to current (up-to-date) manifest
+                Object.keys(MEDIA_MANIFEST).forEach(section => {
+                    MEDIA_MANIFEST[section].forEach(item => {
+                        if (savedCaptions[item.file]) item.caption = savedCaptions[item.file];
+                        if (savedLabels[item.file]) item.label = savedLabels[item.file];
+                    });
+                });
+                
+                // Restore deleted photos (photos in saved manifest but not current)
+                // Only remove if they were deleted from saved work
+                Object.keys(parsed.manifest).forEach(section => {
+                    if (!MEDIA_MANIFEST[section]) return;
+                    const currentFiles = new Set(MEDIA_MANIFEST[section].map(i => i.file));
+                    const savedFiles = new Set(parsed.manifest[section].map(i => i.file));
+                    // If file was in original and is missing from saved, it was deleted → remove it
+                    const originalFiles = new Set(ORIGINAL_MANIFEST[section].map(i => i.file));
+                    MEDIA_MANIFEST[section] = MEDIA_MANIFEST[section].filter(item => {
+                        // Keep if it's a new file (not in original saved) OR was kept in saved
+                        return !originalFiles.has(item.file) || savedFiles.has(item.file);
+                    });
+                });
+                
+                // Restore rotations and view modes
                 Object.keys(parsed.rotations).forEach(key => {
                     ROTATION_DATA[key] = parsed.rotations[key];
                 });
@@ -490,6 +523,10 @@
                         VIEW_MODE_DATA[key] = parsed.viewModes[key];
                     });
                 }
+                
+                // Update ORIGINAL_MANIFEST to reflect current state
+                ORIGINAL_MANIFEST = JSON.parse(JSON.stringify(MEDIA_MANIFEST));
+                
                 console.log('✅ Loaded saved work from previous session');
                 
                 // Show restore banner
