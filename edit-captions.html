@@ -444,16 +444,26 @@
         </div>
     </div>
     
-    <script src="js/media-manifest.js"></script>
+    <script>
+        // Load media-manifest.js with cache-busting so new photos always appear
+        (function() {
+            const script = document.createElement('script');
+            script.src = 'js/media-manifest.js?v=' + Date.now();
+            script.onload = function() { initTool(); };
+            document.head.appendChild(script);
+        })();
+    </script>
     <script>
         // Store original manifest for reset
-        const ORIGINAL_MANIFEST = JSON.parse(JSON.stringify(MEDIA_MANIFEST));
+        let ORIGINAL_MANIFEST;
         
-        // Store rotation data for each file
+        // Global state objects (must be accessible by onclick handlers)
         const ROTATION_DATA = {};
-        
-        // Store view mode (full/zoom) for each file
         const VIEW_MODE_DATA = {};
+        let draggedElement = null;
+        
+        function initTool() {
+        ORIGINAL_MANIFEST = JSON.parse(JSON.stringify(MEDIA_MANIFEST));
         
         // Initialize rotation data from manifest if it exists
         Object.keys(MEDIA_MANIFEST).forEach(section => {
@@ -747,8 +757,6 @@
             
             return card;
         }
-        
-        let draggedElement = null;
         
         function handleDragStart(e) {
             draggedElement = this;
@@ -1096,6 +1104,7 @@ const MEDIA_MANIFEST = {
         
         // Initialize
         renderSections();
+        } // end initTool()
     </script>
 </body>
 </html>
