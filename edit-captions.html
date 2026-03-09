@@ -54,6 +54,8 @@
         #out-area h2 { color: #cdd6f4; margin-bottom: 10px; font-size: 1.05rem; }
         #code-ta { width: 100%; height: 300px; background: #181825; color: #cdd6f4; border: none; border-radius: 8px; padding: 13px; font-family: monospace; font-size: 0.8rem; resize: vertical; }
         .out-btns { display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap; }
+        #toast { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(80px); background: #1e1e2e; color: #a6e3a1; padding: 12px 24px; border-radius: 10px; font-size: 0.9rem; font-weight: 600; box-shadow: 0 6px 24px rgba(0,0,0,0.35); z-index: 9999; transition: transform 0.28s cubic-bezier(.4,1.4,.6,1), opacity 0.28s; opacity: 0; pointer-events: none; }
+        #toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
     </style>
 </head>
 <body>
@@ -77,6 +79,7 @@
         </div>
     </div>
 </div>
+<div id="toast"></div>
 
 <script>
 /* ═══════════════════════════════════════════════════════════════
@@ -652,14 +655,14 @@ function movePhoto(fromSec, f, toSec, card){
     M[fromSec].splice(idx,1);
     M[toSec].push(item);
 
-    // Update source count
+    // Update source count badge
     var srcEl=document.getElementById('cnt-'+fromSec);
     if(srcEl) srcEl.textContent=M[fromSec].length+' photos';
 
-    // Remove card from DOM
+    // Remove card from DOM — stay exactly where we are
     card.remove();
 
-    // Append new card to target section grid
+    // Append new card to target section grid (off-screen, no scroll)
     var toSMeta=SEC.find(function(s){ return s.k===toSec; });
     var newCard=mkCard(item, toSec, toSMeta?toSMeta.cap:false, toSMeta?toSMeta.tl:false);
     var grids=document.querySelectorAll('.grid');
@@ -671,10 +674,20 @@ function movePhoto(fromSec, f, toSec, card){
         targetGrid.appendChild(newCard);
         var tgtEl=document.getElementById('cnt-'+toSec);
         if(tgtEl) tgtEl.textContent=M[toSec].length+' photos';
-        newCard.scrollIntoView({behavior:'smooth', block:'center'});
-        newCard.style.outline='3px solid #667eea';
-        setTimeout(function(){ newCard.style.outline=''; },1500);
     }
+
+    // Show toast — no page jump
+    var toName=toSMeta?toSMeta.n:toSec;
+    showToast('Moved to ' + toName + ' \u2192 end of section');
+}
+
+var _toastTimer=null;
+function showToast(msg){
+    var t=document.getElementById('toast');
+    t.textContent=msg;
+    t.classList.add('show');
+    clearTimeout(_toastTimer);
+    _toastTimer=setTimeout(function(){ t.classList.remove('show'); },2800);
 }
 
 function generate(){
