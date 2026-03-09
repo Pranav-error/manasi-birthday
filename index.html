@@ -168,13 +168,30 @@
         <section id="magic-8ball" class="section">
             <div class="section-inner">
                 <h2 class="section-title wiggly">🎱 Birthday Magic 8-Ball 🎱</h2>
-                <p class="section-sub">( ask about your year ahead! )</p>
-                <div class="eight-ball-container">
-                    <div class="eight-ball" id="eight-ball">
-                        <div class="ball-front">8</div>
-                        <div class="ball-answer" id="ball-answer">Click me!</div>
+                <p class="section-sub">( the universe has answers — trust it 🔮 )</p>
+                <div class="eight-ball-scene">
+                    <div class="eight-ball-left">
+                        <div class="ball-question-wrap">
+                            <input id="ball-question-input" class="ball-question-input" type="text" placeholder="Ask the ball anything... 🔮" maxlength="80" />
+                            <button class="ball-ask-btn" id="ball-ask-btn">Ask! ✨</button>
+                        </div>
+                        <div class="eight-ball-container">
+                            <div class="eight-ball" id="eight-ball">
+                                <div class="ball-shine"></div>
+                                <div class="ball-inner-circle">
+                                    <div class="ball-front">8</div>
+                                    <div class="ball-answer" id="ball-answer">🔮</div>
+                                </div>
+                            </div>
+                            <p class="eight-ball-hint" id="eight-ball-hint">Type a question &amp; click Ask!</p>
+                        </div>
                     </div>
-                    <p class="eight-ball-hint">🫵 Click the ball to ask!</p>
+                    <div class="eight-ball-right">
+                        <div class="ball-history-title">✨ Recent Prophecies</div>
+                        <ul class="ball-history" id="ball-history">
+                            <li class="ball-history-empty">Nothing yet... ask something! 👀</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </section>

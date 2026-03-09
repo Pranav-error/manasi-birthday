@@ -77,19 +77,59 @@ function setupScratchCards() {
    MAGIC 8-BALL 🎱
    ────────────────────────────────────────────────────────────── */
 function setup8Ball() {
-    const ball = $('#eight-ball');
-    const answer = $('#ball-answer');
+    const ball     = $('#eight-ball');
+    const answer   = $('#ball-answer');
+    const hint     = $('#eight-ball-hint');
+    const input    = $('#ball-question-input');
+    const askBtn   = $('#ball-ask-btn');
+    const histList = $('#ball-history');
 
-    ball.addEventListener('click', () => {
-        ball.classList.remove('answered');
+    const YES_TONES   = ["100% YES bestie!! 🎉", "The birthday gods say... YAAAS 👑", "Signs point to you being iconic ✨", "My sources say SLAY 💅", "Without a doubt, queen 👸", "YES YES YES a thousand times YES 🥳", "It is certain ✨", "Definitely yes bestie 🎀"];
+    const NO_TONES    = ["Absolutely not lmaooo 💀", "Don't count on it bestie 😂", "The universe says... nah fam 😭", "Very doubtful 👀", "My sources say no (sorry!) 😬"];
+    const MAYBE_TONES = ["Ask again after cake 🎂", "Better not tell you now 😬", "Outlook: more pizza in your future 🍕", "Reply hazy, try eating cake first 🧁", "Concentrate and ask again 🤷", "Signs are... unclear rn 🌫️", "Maybe? The vibes are mixed 💅"];
+
+    const ALL_ANSWERS = [...YES_TONES, ...NO_TONES, ...MAYBE_TONES];
+
+    function getTone(ans) {
+        if (YES_TONES.includes(ans))   return 'yes';
+        if (NO_TONES.includes(ans))    return 'no';
+        return 'maybe';
+    }
+
+    function addHistory(q, a) {
+        const empty = histList.querySelector('.ball-history-empty');
+        if (empty) empty.remove();
+
+        const li = document.createElement('li');
+        li.className = 'ball-history-item';
+        li.innerHTML = `<div class="ball-history-q">${q ? '"' + q + '"' : '🔮 (no question)'}</div><div class="ball-history-a">${a}</div>`;
+        histList.insertBefore(li, histList.firstChild);
+
+        // Keep max 6
+        while (histList.children.length > 6) histList.removeChild(histList.lastChild);
+    }
+
+    function shake() {
+        const q = (input ? input.value.trim() : '') || '';
+        ball.classList.remove('answered', 'tone-yes', 'tone-no', 'tone-maybe');
         ball.classList.add('shaking');
+        if (hint) hint.textContent = 'The ball is thinking... 🔮';
 
         setTimeout(() => {
             ball.classList.remove('shaking');
-            answer.textContent = pick(CONFIG.eightBallAnswers);
-            ball.classList.add('answered');
-        }, 600);
-    });
+            const ans = pick(ALL_ANSWERS);
+            const tone = getTone(ans);
+            answer.textContent = ans;
+            ball.classList.add('answered', 'tone-' + tone);
+            if (hint) hint.textContent = tone === 'yes' ? '✅ The ball approves!' : tone === 'no' ? '❌ The ball has spoken.' : '🤔 The ball is unsure...';
+            addHistory(q, ans);
+            if (input) input.value = '';
+        }, 650);
+    }
+
+    ball.addEventListener('click', shake);
+    if (askBtn) askBtn.addEventListener('click', shake);
+    if (input) input.addEventListener('keydown', e => { if (e.key === 'Enter') shake(); });
 }
 
 /* ──────────────────────────────────────────────────────────────
