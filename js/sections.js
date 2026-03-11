@@ -56,24 +56,6 @@ function setupSillyStats() {
 }
 
 /* ──────────────────────────────────────────────────────────────
-   SCRATCH CARDS 🎰
-   ────────────────────────────────────────────────────────────── */
-function setupScratchCards() {
-    const grid = $('#scratch-grid');
-    CONFIG.scratchSecrets.forEach((secret) => {
-        const card = document.createElement('div');
-        card.className = 'scratch-card reveal';
-        card.innerHTML = `
-            <div class="scratch-secret">${secret}</div>
-            <div class="scratch-cover">
-                <span class="scratch-label">🎰 SCRATCH ME! 🎰</span>
-            </div>
-        `;
-        grid.appendChild(card);
-    });
-}
-
-/* ──────────────────────────────────────────────────────────────
    MAGIC 8-BALL 🎱
    ────────────────────────────────────────────────────────────── */
 function setup8Ball() {

@@ -34,7 +34,6 @@ function initEverything() {
     setupHero();
     setupRoasts();
     setupSillyStats();
-    setupScratchCards();
     setup8Ball();
     setupBirthdayQuiz = function(){}; // replaced by Eras
     setupEras();
@@ -477,7 +476,7 @@ function shakeScreen() {
 /* 17. SECTION SPOTLIGHT + STAMP */
 var sectionStamps = {
     'roast': '🔥', 'silly-stats': '📊', 'polaroid-wall': '📸',
-    'carousel-section': '🎞️', 'scratch-section': '🎰', 'spin-section': '🎡',
+    'carousel-section': '🎞️', 'spin-section': '🎡',
     'magic-8ball': '🎱', 'eras-section': '🌟', 'cake-section': '🎂',
     'gift-section': '🎁', 'mosaic': '🖼️', 'timeline': '📅',
     'letter-section': '💌', 'wishes': '💌', 'guestbook': '📝'

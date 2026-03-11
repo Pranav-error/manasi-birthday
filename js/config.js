@@ -37,22 +37,6 @@ const CONFIG = {
         { emoji: "💅", number: "100%", label: "Iconic-ness level" },
     ],
 
-    // Scratch card secrets
-    scratchSecrets: [
-        "She once wore her shirt inside out ALL day and nobody told her 😭",
-        "Still has a Spotify playlist called 'crying in the shower' from 2019 💀",
-        "Googled 'how to adult' at least 14 times this year 🧠",
-        "Has 847 unread emails and isn't even sorry about it 📧",
-        "Once called the teacher 'Mom' in HIGH SCHOOL 😂",
-        "Her search history includes 'is it bad to eat cereal for dinner every day' 🥣",
-        "Cried watching Shrek. SHREK. The ogre movie. 🧅",
-        "Still doesn't know her left from her right. It's been 20+ years. ↔️",
-        "Once waved back at someone who wasn't waving at her. We all saw. 👋",
-        "Has said 'I'll start the diet on Monday' every week since 2021 🍩",
-        "Accidentally liked her crush's photo from 2017. The scroll of shame. 📱",
-        "Laughed so hard she snorted milk out of her nose. In public. 🥛",
-    ],
-
     // Magic 8-ball answers (birthday themed)
     eightBallAnswers: [
         "100% YES bestie!! 🎉",
@@ -76,8 +60,8 @@ const CONFIG = {
     wishes: [
         { text: `1) Happy Birthday to the perfect partner in crime, to the one who can fight ( or so she thinks ) and to one of the best people I know 🤩🤩\n2) Don't stop slaying and continue being the wonderful person you are 💪💃\n3) You are the Tom to my Jerry and the Max to my Eleven`, author: "Arya" },
         { text: "To one of the coolest(🤥) people I know, I honestly don't remember how we became friends, but I'm really glad we did.Happyyyy birthdayyyyy Manasisisi🍑🍑", author: "Reyna" },
-        { text: "You're not getting older, you're getting... more experienced at being iconic. Happy Birthday legend! 👑", author: "Your No.1 Fan" },
-        { text: "May your birthday be as bright and extra as you are! (and that's saying something because you are VERY extra) ✨", author: "With all the love" },
+        { text: "Happiestt bdayy to the prettiest girl i know, and uk that I would be the first person  to ask u out if I was a boy 😞🖤,anyways my chicken partner let's go on a biryani date 🫠", author: "your chicken partner(aka Asha)" },
+        { text: "Happy Birthday Patti 🎉As annoying as you are, you’re just as amazing too — never change!And reminder: you are officially becoming an aunty now 😂✨", author: "pranav" },
         { text: "To someone who makes ordinary days feel like adventures — Happy Birthday! Let's make this year even more unhinged! 🎢", author: "Your Partner in Crime" },
         { text: "You deserve the world and also a nap. Probably the nap first. Happy Birthday! 😴❤️", author: "Sleep Gang" },
     ],
@@ -100,10 +84,10 @@ const CONFIG = {
         "🤳 Post the worst selfie on your story",
         "🎵 Sing happy birthday to yourself loudly",
         "😂 Tell everyone your most embarrassing story",
-        "🙌 Call your bestie and scream HAPPY BIRTHDAY",
+        "🙌 Call yourself a bitch and scream YOUR LESBIAN",
         "🤪 Make the weirdest face possible for a photo",
         "🍕 You get free pizza today (just kidding... unless?)",
-        "💑 Text your crush 'hey' (no chickening out!)",
+        "💑 Text your X 'hey' (no chickening out!)",
     ],
 
     // Birthday quiz (section replaced by Eras)
@@ -111,23 +95,23 @@ const CONFIG = {
 
     // Gift messages
     giftMessages: [
-        "You're not just a friend, you're family ❤️ We love you more than words (and more than pizza, and that's saying A LOT) 🍕💫",
+        "You're not just a friend, you're family ❤️ We love you more than words (and more than DBC, and that's saying A LOT) 🍕💫",
         "Here's your gift: unlimited hugs, eternal friendship, and the promise that we'll always have your back. No returns accepted! 🎁🤗",
-        "The real gift was the memories we made along the way... jk we also got you cake 🎂🎉",
+        "The real gift was the memories we made along the way... jk we also got you cake in the mrng 🎂🎉",
     ],
 
     // Secret letter text
-    letterText: `Dear Birthday Superstar ✨,
+    letterText: `Dear patti ✨,
 
-Okay so... I'm writing this letter because saying all this out loud would be WAY too emotional and my mascara can't handle that right now 😂
+Okay so... writing this letter because saying all this out loud would be WAY too emotional and your mascara(if u have put on some) can't handle that right now 😂
 
-But seriously — you are one of the most incredible humans on this planet. Your laugh is literally contagious (and kinda loud but we love that), your heart is made of pure gold, and your ability to make everyone around you smile is a genuine superpower.
+But seriously — you are one of the most incredible animals on this planet. Your laugh is literally contagious (and kinda irritating but we love that), your heart is made of pure aluminum, and your ability to make everyone around you smile is a genuine superpower.
 
-Thank you for being YOU. For the late night talks, the random adventures, the ugly-crying movie nights, and for always knowing exactly what to say (or what meme to send).
+Thank you for being YOU. The random places we went, the bullying, and for always knowing exactly what to say(but not telling).
 
 Here's to another year of being absolutely unhinged, wildly iconic, and unapologetically YOU.
 
-Happy Birthday, queen. We love you SO MUCH. 💖
+Happy Birthday, Patti. hoping that u stop reading meesages from drop down We love you SO MUCH. 💖
 
-— Your People 🤍`,
+— Your Friends 🤍`,
 };
