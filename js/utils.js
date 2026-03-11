@@ -40,8 +40,7 @@ function getExt(filename) {
 }
 
 function mediaPath(filename) {
-    // Serve from Supabase CDN for fast global delivery
-    return `https://dorwjagmlrdgoazuhray.supabase.co/storage/v1/object/public/birthday-photos/${encodeURIComponent(filename)}`;
+    return `${CONFIG.mediaFolder}/${encodeURIComponent(filename)}`;
 }
 
 function isVideo(filename) {
