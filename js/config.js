@@ -13,14 +13,14 @@ const CONFIG = {
 
     // Birthday roasts (make these personal & funny!)
     roasts: [
-        { emoji: "😴", text: "Remember that time you fell asleep during your OWN birthday party? Iconic behavior honestly." },
-        { emoji: "🤳", text: "Takes 47 selfies to get 'the one' and then posts it with the caption 'first try lol'" },
-        { emoji: "🍕", text: "Once cried because the pizza place was closed. Priorities = CORRECT." },
+        { emoji: "😴", text: "You say you're nonchalant but saying that makes you the most CHALANT 🐒" },
+        { emoji: "🤳", text: "Those biceps are impressive, I almost saw them for a second" },
+        { emoji: "🍕", text: "says we should eat DBC having a cold because the chocolate in is hot" },
         { emoji: "💀", text: "Your dance moves look like you're fighting an invisible bee. And LOSING." },
-        { emoji: "📱", text: "Replies to texts 3 days later with 'omg I just saw this' — babe we ALL know you saw it." },
+        { emoji: "📱", text: "Replies to texts 3 days later with 'omg I just saw this' —  we ALL know you saw it." },
         { emoji: "🧠", text: "Has the memory of a goldfish but somehow remembers that embarrassing thing from 2019." },
-        { emoji: "😤", text: "Gets mad at GPS for 'being rude' when it says 'recalculating.' Ma'am, YOU missed the turn." },
-        { emoji: "🥺", text: "Acts tough but cries watching puppy videos. Every. Single. Time." },
+        { emoji: "😤", text: "You’re proof that growing older doesn’t mean growing up." },
+        { emoji: "🥺", text: "Acts tough but cries watching movies. Every. Single. Time." },
     ],
 
     // Silly life stats
@@ -62,8 +62,7 @@ const CONFIG = {
         { text: "To one of the coolest(🤥) people I know, I honestly don't remember how we became friends, but I'm really glad we did.Happyyyy birthdayyyyy Manasisisi🍑🍑", author: "Reyna" },
         { text: "Happiestt bdayy to the prettiest girl i know, and uk that I would be the first person  to ask u out if I was a boy 😞🖤,anyways my chicken partner let's go on a biryani date 🫠", author: "your chicken partner(aka Asha)" },
         { text: "Happy Birthday Patti 🎉As annoying as you are, you’re just as amazing too — never change!And reminder: you are officially becoming an aunty now 😂✨", author: "pranav" },
-        { text: "To someone who makes ordinary days feel like adventures — Happy Birthday! Let's make this year even more unhinged! 🎢", author: "Your Partner in Crime" },
-        { text: "You deserve the world and also a nap. Probably the nap first. Happy Birthday! 😴❤️", author: "Sleep Gang" },
+        { text: "from seeing you for the first time and thinking she seems like a bitch to now thinking shes a bitch weve come a far way i dont have a sibling but youre the closest thing to one to my kaleshi aurat i hope you continue to shine like you always do your presence makes my day so much better happy birthday pattti", author: "Pragathi" },
     ],
 
     // Random popup messages
