@@ -15,7 +15,7 @@ const CONFIG = {
     roasts: [
         { emoji: "😴", text: "You say you're nonchalant but saying that makes you the most CHALANT 🐒" },
         { emoji: "🤳", text: "Those biceps are impressive, I almost saw them for a second" },
-        { emoji: "🍕", text: "says we should eat DBC having a cold because the chocolate in is hot" },
+        { emoji: "🍕", text: "says we should eat DBC having a cold because the chocolate in it is hot" },
         { emoji: "💀", text: "Your dance moves look like you're fighting an invisible bee. And LOSING." },
         { emoji: "📱", text: "Replies to texts 3 days later with 'omg I just saw this' —  we ALL know you saw it." },
         { emoji: "🧠", text: "Has the memory of a goldfish but somehow remembers that embarrassing thing from 2019." },
