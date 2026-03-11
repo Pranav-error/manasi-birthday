@@ -74,8 +74,8 @@ const CONFIG = {
 
     // Birthday wishes
     wishes: [
-        { text: "Happy Birthday to the most chaotic, lovable, hilarious human I know! Never change (except maybe your texting speed) 😂💕", author: "Your BFF" },
-        { text: "Another year of being absolutely unhinged and we LOVE you for it! Here's to more embarrassing stories! 🥂", author: "The Squad" },
+        { text: `1) Happy Birthday to the perfect partner in crime, to the one who can fight ( or so she thinks ) and to one of the best people I know 🤩🤩\n2) Don't stop slaying and continue being the wonderful person you are 💪💃\n3) You are the Tom to my Jerry and the Max to my Eleven`, author: "Arya" },
+        { text: "To one of the coolest(🤥) people I know, I honestly don't remember how we became friends, but I'm really glad we did.Happyyyy birthdayyyyy Manasisisi🍑🍑", author: "Reyna" },
         { text: "You're not getting older, you're getting... more experienced at being iconic. Happy Birthday legend! 👑", author: "Your No.1 Fan" },
         { text: "May your birthday be as bright and extra as you are! (and that's saying something because you are VERY extra) ✨", author: "With all the love" },
         { text: "To someone who makes ordinary days feel like adventures — Happy Birthday! Let's make this year even more unhinged! 🎢", author: "Your Partner in Crime" },
