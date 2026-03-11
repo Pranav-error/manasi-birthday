@@ -40,7 +40,8 @@ function getExt(filename) {
 }
 
 function mediaPath(filename) {
-    return `${CONFIG.mediaFolder}/${encodeURIComponent(filename)}`;
+    // Serve from Supabase CDN for fast global delivery
+    return `https://dorwjagmlrdgoazuhray.supabase.co/storage/v1/object/public/birthday-photos/${encodeURIComponent(filename)}`;
 }
 
 function isVideo(filename) {
@@ -84,12 +85,12 @@ function createMediaElement(filename, opts = {}) {
     
     if (isVideo(actualFilename)) {
         const vid = document.createElement('video');
-        vid.src = path;
+        // Use data-src for lazy loading — don't start downloading until near viewport
+        vid.dataset.src = path;
         vid.muted = opts.muted !== false;
         vid.loop = opts.loop !== false;
-        vid.autoplay = opts.autoplay !== false;
         vid.playsInline = true;
-        vid.preload = 'metadata';
+        vid.preload = 'none';
         if (opts.controls) vid.controls = true;
         vid.className = opts.className || '';
         vid.style.cssText = 'width:100%;height:100%;object-fit:' + (opts.objectFit || 'cover') + ';' + rotationStyle;
@@ -98,6 +99,23 @@ function createMediaElement(filename, opts = {}) {
             container.innerHTML = buildPlaceholder();
         };
         container.appendChild(vid);
+
+        // Lazy-load video src when it enters the viewport
+        const videoObserver = new IntersectionObserver((entries, obs) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const v = entry.target;
+                    if (!v.src && v.dataset.src) {
+                        v.src = v.dataset.src;
+                        if (opts.autoplay !== false) {
+                            v.play().catch(() => {}); // autoplay may be blocked; silently ignore
+                        }
+                    }
+                    obs.unobserve(v);
+                }
+            });
+        }, { rootMargin: '200px' });
+        videoObserver.observe(vid);
     } else {
         const img = document.createElement('img');
         img.src = path;
