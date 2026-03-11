@@ -86,11 +86,10 @@ function createMediaElement(filename, opts = {}) {
     if (isVideo(actualFilename)) {
         const vid = document.createElement('video');
         vid.src = path;
-        vid.muted = opts.muted !== false;
+        vid.muted = true;           // must be muted for autoplay to work in browsers
         vid.loop = opts.loop !== false;
         vid.playsInline = true;
         vid.preload = 'none';
-        if (opts.autoplay !== false) vid.autoplay = true;
         if (opts.controls) vid.controls = true;
         vid.className = opts.className || '';
         vid.style.cssText = 'width:100%;height:100%;object-fit:' + (opts.objectFit || 'cover') + ';' + rotationStyle;
@@ -99,6 +98,20 @@ function createMediaElement(filename, opts = {}) {
             container.innerHTML = buildPlaceholder();
         };
         container.appendChild(vid);
+
+        // Play when scrolled into view, pause when out — smooth + performant
+        if (opts.autoplay !== false) {
+            const playObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        vid.play().catch(() => {});
+                    } else {
+                        vid.pause();
+                    }
+                });
+            }, { threshold: 0.25 });
+            playObserver.observe(vid);
+        }
     } else {
         const img = document.createElement('img');
         img.src = path;
