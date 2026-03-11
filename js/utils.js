@@ -88,7 +88,7 @@ function createMediaElement(filename, opts = {}) {
         vid.muted = true;           // must be muted for autoplay to work in browsers
         vid.loop = opts.loop !== false;
         vid.playsInline = true;
-        vid.preload = 'none';
+        vid.preload = 'metadata';
         if (opts.controls) vid.controls = true;
         vid.className = opts.className || '';
         vid.style.cssText = 'width:100%;height:100%;object-fit:' + (opts.objectFit || 'cover') + ';' + rotationStyle;
